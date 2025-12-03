@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\Dummy;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,3 +20,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/', function () {
+    $listings = Dummy::all();
+    return view('xdashboard', ['listings' => $listings]);
+})->name('xdashboard');
+
+Route::get('/penginapan/{id}', function ($id) {
+    $listings = Dummy::all();
+    $list = Arr::first($listings, fn($list) => $list['id'] == $id);
+    return view('listings', ['list' => $list]);
+});
