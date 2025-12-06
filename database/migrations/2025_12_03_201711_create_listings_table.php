@@ -13,10 +13,17 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('image_path')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('listings', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Category::class);
+            $table->foreignIdFor(Category::class)->constrained();
             $table->string('title');
             $table->text('description');
             $table->integer('room_count');
@@ -35,5 +42,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('listings');
+        Schema::dropIfExists('categories');
     }
 };
