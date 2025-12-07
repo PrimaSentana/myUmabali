@@ -20,10 +20,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('listings_facilities', function (Blueprint $table) {
+        Schema::create('facility_listings', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Listings::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Facility::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Listings::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -34,5 +34,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('facilities');
+        Schema::dropIfExists('facility_listings');
     }
 };

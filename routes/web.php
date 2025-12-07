@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PenginapanController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Dummy;
 use Illuminate\Support\Arr;
@@ -21,13 +22,9 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/', function () {
-    $listings = Dummy::all();
-    return view('xdashboard', ['listings' => $listings]);
-})->name('xdashboard');
+Route::get('/', [PenginapanController::class, 'index'])->name('xdashboard');
 
-Route::get('/penginapan/{id}', function ($id) {
-    $listings = Dummy::all();
-    $list = Arr::first($listings, fn($list) => $list['id'] == $id);
-    return view('listings', ['list' => $list]);
-});
+Route::get('/penginapan/{id}', [PenginapanController::class, 'show']);
+
+Route::get('/form/penginapan', [PenginapanController::class, 'create']);
+Route::post('/penginapan', [PenginapanController::class, 'store'])->middleware('auth');
