@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('listing_images', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Listings::class)->constrained();
+            $table->foreignIdFor(Listings::class)->constrained()->cascadeOnDelete();
             $table->string('image_path');
             $table->boolean('isCover');
             $table->boolean('isKamar');
