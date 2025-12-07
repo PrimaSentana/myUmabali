@@ -39,7 +39,7 @@
     
       <!-- Menjadi Tuan Rumah -->
     @auth()
-      <a href="#"
+      <a href="/form/penginapan"
         class="px-4 py-2 rounded-full text-black font-semibold bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
         Menjadi Tuan Rumah
       </a>
