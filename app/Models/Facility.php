@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Facility extends Model
 {
     protected $table = 'facilities';
+    protected $guarded = [];
+
+    public function listings() {
+        return $this->belongsToMany(Listings::class);
+    }
 }
