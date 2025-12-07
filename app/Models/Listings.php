@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Listings extends Model
 {
     protected $table = 'listings';
+    protected $guarded = [];
 
     public function images() {
         return $this->hasMany(ListingImage::class);
@@ -22,5 +23,9 @@ class Listings extends Model
 
     public function facilities() {
         return $this->belongsToMany(Facility::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }
