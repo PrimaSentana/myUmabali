@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PenginapanController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Dummy;
 use Illuminate\Support\Arr;
@@ -31,3 +32,6 @@ Route::get('/penginapan/{id}', function ($id) {
     $list = Arr::first($listings, fn($list) => $list['id'] == $id);
     return view('listings', ['list' => $list]);
 });
+
+Route::get('/form/penginapan', [PenginapanController::class, 'create']);
+Route::post('/penginapan', [PenginapanController::class, 'store']);
