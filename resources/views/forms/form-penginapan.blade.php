@@ -1,0 +1,226 @@
+@extends('layouts.home')
+
+@section('content')
+<div class="max-w-3xl mx-auto px-4 py-10">
+    <div class="bg-white rounded-2xl shadow-sm p-8 border-2 border-slate-500">
+        <h1 class="text-4xl font-semibold text-gray-800 mb-1">
+            Upload Penginapan
+        </h1>
+        <p class="text-gray-500 mb-8">
+            Lengkapi detail penginapan kamu seperti di Airbnb
+        </p>
+
+        <form method="POST" action="/penginapan" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+            {{-- Title --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-1">
+                    Judul Penginapan
+                </label>
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Contoh: Villa dengan view sawah di Ubud"
+                    class="w-full rounded-xl border-gray-300 focus:border-rose-500 focus:ring-rose-500"
+                    required
+                >
+            </div>
+
+            {{-- Description --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-1">
+                    Deskripsi
+                </label>
+                <textarea
+                    name="description"
+                    rows="4"
+                    placeholder="Ceritakan keunikan penginapan kamu..."
+                    class="w-full rounded-xl border-gray-300 focus:border-rose-500 focus:ring-rose-500"
+                    required
+                ></textarea>
+            </div>
+
+            {{-- Room info --}}
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-lg font-medium text-gray-700 mb-1">
+                        Kamar Tidur
+                    </label>
+                    <input
+                        type="number"
+                        name="room_count"
+                        min="1"
+                        class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-lg font-medium text-gray-700 mb-1">
+                        Kamar Mandi
+                    </label>
+                    <input
+                        type="number"
+                        name="bathroom_count"
+                        min="1"
+                        class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label class="block text-lg font-medium text-gray-700 mb-1">
+                        Tamu
+                    </label>
+                    <input
+                        type="number"
+                        name="guest_count"
+                        min="1"
+                        class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
+                        required
+                    >
+                </div>
+            </div>
+
+            {{-- Location --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-1">
+                    Lokasi
+                </label>
+                <select
+                    name="location_value"
+                    class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
+                    required
+                >
+                    <option value="">Pilih lokasi</option>
+                    <option value="Badung">Badung</option>
+                    <option value="Gianyar">Gianyar</option>
+                    <option value="Denpasar">Denpasar</option>
+                    <option value="Tabanan">Tabanan</option>
+                    <option value="Buleleng">Buleleng</option>
+                </select>
+            </div>
+
+            {{-- Categories --}}
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800 mb-1">
+                    Kategori mana yang paling menggambarkan tempat Anda?
+                </h2>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                    @foreach ($categories as $category)
+                        <label class="cursor-pointer">
+                            <input
+                                type="radio"
+                                name="category"
+                                value="{{ $category->id }}"
+                                class="peer hidden"
+                                required
+                            >
+
+                            <div
+                                class="border rounded-xl p-5 text-center
+                                    peer-checked:border-rose-500
+                                    peer-checked:ring-2 peer-checked:ring-rose-500
+                                    hover:border-gray-400 transition"
+                            >
+                                <div class="text-3xl mb-2 flex flex-col items-center justify-center">
+                                    <img src="{{ asset('storage/' . $category->image_path) }}" alt="{{ $category->title }}" class="w-12">
+                                </div>
+                                <p class="font-medium text-gray-700">
+                                    {{ $category->title }}
+                                </p>
+                            </div>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Facilities --}}
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800 mb-1">
+                    Fasilitas yang tersedia
+                </h2>
+                <p class="text-sm text-gray-500">
+                    Bisa pilih lebih dari satu
+                </p>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                    @foreach ($facilities as $facility)
+                        <label class="cursor-pointer">
+                            <input
+                                type="checkbox"
+                                name="facilities[]"
+                                value="{{ $facility->id }}"
+                                class="peer hidden"
+                            >
+
+                            <div
+                                class="border rounded-xl p-5 flex flex-col items-center text-center
+                                    peer-checked:border-rose-500
+                                    peer-checked:ring-2 peer-checked:ring-rose-500
+                                    hover:border-gray-400 transition"
+                            >
+                                <div class="text-3xl mb-2">
+                                    <img src="{{ asset('storage/' . $facility->image_path) }}" alt="{{ $facility->title }}" class="w-12">
+                                </div>
+                                <p class="font-medium text-gray-700">
+                                    {{ $facility->title }}
+                                </p>
+                            </div>
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+
+            {{-- Images --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-2">
+                    Foto Penginapan
+                </label>
+
+                <input
+                    id="images"
+                    type="file"
+                    name="images[]"
+                    multiple
+                    accept="image/*"
+                    class="block w-full text-lg text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-xl file:border-0
+                        file:text-lg file:font-medium
+                        file:bg-rose-50 file:text-rose-600
+                        hover:file:bg-rose-100"
+                >
+
+                <p class="text-lg text-gray-400 mt-1">
+                    Upload beberapa foto. Foto pertama otomatis jadi cover.
+                </p>
+
+                {{-- preview --}}
+                <div id="preview" class="grid grid-cols-3 gap-4 mt-4"></div>
+            </div>
+
+
+            {{-- Price --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-1">
+                    Harga per malam (Rp)
+                </label>
+                <input
+                    type="number"
+                    name="price"
+                    placeholder="Contoh: 750000"
+                    class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
+                >
+            </div>
+
+            {{-- Submit --}}
+            <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3 rounded-xl transition">
+                Simpan Penginapan
+            </button>
+        </form>
+    </div>
+</div>
+@endsection
