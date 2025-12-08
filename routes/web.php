@@ -25,6 +25,5 @@ require __DIR__.'/auth.php';
 Route::get('/', [PenginapanController::class, 'index'])->name('xdashboard');
 
 Route::get('/penginapan/{id}', [PenginapanController::class, 'show']);
-
 Route::get('/form/penginapan', [PenginapanController::class, 'create']);
 Route::post('/penginapan', [PenginapanController::class, 'store'])->middleware('auth');
