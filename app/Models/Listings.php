@@ -25,6 +25,10 @@ class Listings extends Model
         return $this->belongsToMany(Facility::class);
     }
 
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
+
     public function user() {
         return $this->belongsTo(User::class);
     }

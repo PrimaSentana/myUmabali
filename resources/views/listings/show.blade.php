@@ -9,17 +9,28 @@
 @section('content')
     <div class="container mx-auto px-4 py-8 text-[#1b1b18]">
 
-    <!-- Judul -->
-    <h1 class="text-xl font-medium mb-4">{{ $listings->title }}, Kamar untuk {{ $listings->guest_count }} orang</h1>
+    <div class="flex justify-between items-center">
+        <h1 class="text-xl font-medium mb-4">{{ $listings->title }}, Kamar untuk {{ $listings->guest_count }} orang</h1>
+        <div class="flex gap-8 mr-8">
+            @can('update', $listings)
+                <a href="{{ route('listings.edit', $listings) }}" class="text-xl font-medium underline">Edit</a>
+            @endcan
 
-    <!-- Bagian Foto -->
+            @can('delete', $listings)
+                <form method="POST">
+                    @method('DELETE')
+                    <button class="text-xl font-medium underline">Hapus</button>
+                </form>
+            @endcan
+        </div>
+    </div>
+
+    {{-- tmpt photo --}}
     <div class="grid grid-cols-3 gap-2 h-128 rounded-xl overflow-hidden">
-    <!-- Gambar besar -->
         <div class="col-span-2 h-full bg-gray-200 rounded-left-xl overflow-hidden">
             <img src="{{ asset('storage/' . $listings->coverImage->image_path) }}" alt="{{ $listings->title }}" class="w-full h-full object-cover">
         </div>
 
-        <!-- Gambar kecil di kanan -->
         <div class="grid grid-rows-2 gap-2">
             @foreach ($images as $image)
                 <div class="h-64 bg-gray-200 rounded-xl overflow-visible">
@@ -34,7 +45,7 @@
 
     <div class="flex flex-col md:flex-row gap-8 mt-8">
 
-        <!-- Kolom kiri -->
+        <!-- kiri -->
         <div class="md:w-2/3 space-y-6">
 
             <p class="text-gray-600">
@@ -94,7 +105,7 @@
             </div>
         </div>
 
-        <!-- Kolom kanan (Card harga)
+        <!-- kanan (card harga)
             TODO: ubah jadi form
         -->
         <div class="md:w-1/3">

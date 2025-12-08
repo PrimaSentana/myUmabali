@@ -8,6 +8,9 @@ use App\Models\ListingImage;
 use App\Models\Listings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Storage;
 
 class PenginapanController extends Controller
 {
@@ -90,15 +93,79 @@ class PenginapanController extends Controller
         return view('listings.show', ['listings' => $listings, 'images' => $images, 'facilities' => $facilities]);
     }
 
-    public function edit() {
-        return;
+    public function edit(Listings $listings) {
+        $this->authorize('update', $listings);
+
+        $categories = Category::all();
+        $facilities = Facility::all();
+
+        return view('listings.edit', ['listings' => $listings, 'categories' => $categories, 'facilities' => $facilities]);
     }
     
-    public function update() {
-        return;
+    public function update(Listings $listings, ListingImage $listingImage) {
+        // $this->authorize('update', $listings);
+
+        request()->validate([
+            'title' => ['required', 'min:5'],
+            'description' => ['required'],
+            'room_count' => ['required'],
+            'guest_count' => ['required'],
+            'bathroom_count' => ['required'],
+            'location_value' => ['required'],
+            'category' => ['required'],
+            'facilities' => ['array'],
+            'images' => ['array'],
+            'price' => ['required'],
+        ]);
+
+        $listings->update([
+            'title' => request('title'),
+            'category_id' => request('category'),
+            'description' => request('description'),
+            'room_count' => request('room_count'),
+            'room_status' => request('room_count'),
+            'guest_count' => request('guest_count'),
+            'bathroom_count' => request('bathroom_count'),
+            'location_value' => request('location_value'),
+            'price' => request('price'),
+            'latitude' => request('latitude'),
+            'longitude' => request('longitude'),
+            'user_id' => Auth::id()
+        ]);
+
+        if(request()->filled('facilities')) {
+            $listings->facilities()->sync(request()->facilities);
+        }
+
+        if (request()->filled('removed_images')) {
+            $ids = json_decode(request()->removed_images, true);
+
+            $images = ListingImage::whereIn('id', $ids)->get();
+
+            foreach ($images as $image) {
+                Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            }
+        }
+
+        if (request()->hasFile('images')) {
+            foreach (request()->file('images') as $file) {
+                $path = $file->store('listings', 'public');
+
+                $listings->images()->create([
+                    'image_path' => $path,
+                    'is_cover' => false,
+                    'is_kamar' => false,
+                ]);
+            }
+        }
+
+        return redirect(route('listings.show', $listings->id));
     }
     
-    public function delete() {
-        return;
+    public function destroy(Listings $listings) {
+        $this->authorize('delete', $listings);
+
+        $listings->delete();
     }
 }

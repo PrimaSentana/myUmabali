@@ -10,9 +10,10 @@
             Lengkapi detail penginapan kamu seperti di Airbnb
         </p>
 
-        <form method="POST" action="/penginapan" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="{{ route('listings.update', $listings) }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
-            {{-- Title --}}
+            @method('PATCH')
+            {{-- title --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-1">
                     Judul Penginapan
@@ -23,13 +24,14 @@
                     placeholder="Contoh: Villa dengan view sawah di Ubud"
                     class="w-full rounded-xl border-gray-300 focus:border-rose-500 focus:ring-rose-500"
                     required
+                    value="{{ old('title', $listings->title) }}"
                 >
                 @error('title')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Description --}}
+            {{-- description --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-1">
                     Deskripsi
@@ -40,13 +42,13 @@
                     placeholder="Ceritakan keunikan penginapan kamu..."
                     class="w-full rounded-xl border-gray-300 focus:border-rose-500 focus:ring-rose-500"
                     required
-                ></textarea>
+                >{{ old('description', $listings->description) }}</textarea>
                 @error('description')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Room info --}}
+            {{-- room count --}}
             <div class="grid grid-cols-3 gap-4">
                 <div>
                     <label class="block text-lg font-medium text-gray-700 mb-1">
@@ -58,6 +60,7 @@
                         min="1"
                         class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
                         required
+                        value="{{ old('room_count', $listings->room_count) }}"
                     >
                     @error('room_count')
                         <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -74,6 +77,7 @@
                         min="1"
                         class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
                         required
+                        value="{{ old('bathroom_count', $listings->bathroom_count) }}"
                     >
                     @error('bathroom_count')
                         <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -90,6 +94,7 @@
                         min="1"
                         class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
                         required
+                        value="{{ old('guest_count', $listings->guest_count) }}"
                     >
                     @error('guest_count')
                         <p class="text-red-500 text-sm">{{ $message }}</p>
@@ -97,7 +102,7 @@
                 </div>
             </div>
 
-            {{-- Location --}}
+            {{-- lokasi --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-1">
                     Alamat Lengkap
@@ -107,6 +112,7 @@
                     name="location_value"
                     class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
                     required
+                    value="{{ old('location_value', $listings->location_value) }}"
                 >
                 </input>
                 @error('location_value')
@@ -114,7 +120,7 @@
                 @enderror
             </div>
 
-            {{-- Leaflet --}}
+            {{-- map --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-1">
                     Tentukan lokasi penginapan anda
@@ -125,8 +131,8 @@
                 <p class="text-xs text-gray-500 mt-2">
                     Klik peta atau geser pin untuk menentukan lokasi
                 </p>
-                <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
-                <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+                <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $listings->latitude) }}">
+                <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $listings->longitude) }}">
                 @error('latitude')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
@@ -135,7 +141,7 @@
                 @enderror
             </div>
 
-            {{-- Categories --}}
+            {{-- categories --}}
             <div>
                 <h2 class="text-lg font-semibold text-gray-800 mb-1">
                     Kategori mana yang paling menggambarkan tempat Anda?
@@ -150,6 +156,7 @@
                                 value="{{ $category->id }}"
                                 class="peer hidden"
                                 required
+                                {{ old('category', $listings->category_id) == $category->id ? 'checked' : '' }}
                             >
 
                             <div
@@ -173,7 +180,7 @@
                 </div>
             </div>
 
-            {{-- Facilities --}}
+            {{-- facilities --}}
             <div>
                 <h2 class="text-lg font-semibold text-gray-800 mb-1">
                     Fasilitas yang tersedia
@@ -190,6 +197,12 @@
                                 name="facilities[]"
                                 value="{{ $facility->id }}"
                                 class="peer hidden"
+                                @checked(
+                                    in_array(
+                                        $facility->id,
+                                        old('facilities', $listings->facilities->pluck('id')->toArray())
+                                    )
+                                )
                             >
 
                             <div
@@ -213,7 +226,8 @@
                 @enderror
             </div>
 
-            {{-- Images --}}
+
+            {{-- images --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-2">
                     Foto Penginapan
@@ -225,12 +239,7 @@
                     name="images[]"
                     multiple
                     accept="image/*"
-                    class="block w-full text-lg text-gray-500
-                        file:mr-4 file:py-2 file:px-4
-                        file:rounded-xl file:border-0
-                        file:text-lg file:font-medium
-                        file:bg-rose-50 file:text-rose-600
-                        hover:file:bg-rose-100"
+                    class="block w-full text-lg text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-lg file:font-medium file:bg-rose-50 file:text-rose-600 hover:file:bg-rose-100"
                 >
 
                 <p class="text-lg text-gray-400 mt-1">
@@ -241,11 +250,22 @@
                 @enderror
 
                 {{-- preview --}}
-                <div id="preview" class="grid grid-cols-3 gap-4 mt-4"></div>
+                <div id="image-preview" class="grid grid-cols-3 gap-4 mt-4">
+                    @foreach ($listings->images as $image)
+                        <div class="relative image-item" data-existing="true" data-id="{{ $image->id }}">
+                            <img src="{{ asset('storage/' . $image->image_path) }}" class=" w-full h-32 object-cover rounded-lg">
+                            <button type="button" class="remove-image text-white font-bold absolute top-2 right-2 rounded-full w-7 h-7">
+                                ✕
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
+
+                <input type="hidden" name="removed_images" id="removed-images">
             </div>
 
 
-            {{-- Price --}}
+            {{-- price --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-1">
                     Harga per malam (Rp)
@@ -255,13 +275,13 @@
                     name="price"
                     placeholder="Contoh: 750000"
                     class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
+                    value="{{ old('price', $listings->price) }}"
                 >
                 @error('price')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Submit --}}
             <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-3 rounded-xl transition">
                 Simpan Penginapan
             </button>

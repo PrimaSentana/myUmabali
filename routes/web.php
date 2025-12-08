@@ -24,6 +24,11 @@ require __DIR__.'/auth.php';
 
 Route::get('/', [PenginapanController::class, 'index'])->name('xdashboard');
 
-Route::get('/penginapan/{id}', [PenginapanController::class, 'show']);
-Route::get('/form/penginapan', [PenginapanController::class, 'create']);
+Route::get('/form/penginapan', [PenginapanController::class, 'create'])->name('listings.create');
+
+Route::get('/penginapan/{listings}/edit', [PenginapanController::class, 'edit'])->name('listings.edit');
+Route::patch('/penginapan/{id}', [PenginapanController::class, 'update'])->name('listings.update')->middleware('auth');
+
 Route::post('/penginapan', [PenginapanController::class, 'store'])->middleware('auth');
+
+Route::get('/penginapan/{id}', [PenginapanController::class, 'show'])->name('listings.show');
