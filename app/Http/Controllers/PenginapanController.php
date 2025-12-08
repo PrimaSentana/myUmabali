@@ -102,8 +102,10 @@ class PenginapanController extends Controller
         return view('listings.edit', ['listings' => $listings, 'categories' => $categories, 'facilities' => $facilities]);
     }
     
-    public function update(Listings $listings, ListingImage $listingImage) {
+    public function update($id) {
         // $this->authorize('update', $listings);
+
+        $listings = Listings::findOrFail($id);
 
         request()->validate([
             'title' => ['required', 'min:5'],
@@ -149,13 +151,13 @@ class PenginapanController extends Controller
         }
 
         if (request()->hasFile('images')) {
-            foreach (request()->file('images') as $file) {
+            foreach (request()->file('images') as $index => $file) {
                 $path = $file->store('listings', 'public');
 
                 $listings->images()->create([
                     'image_path' => $path,
-                    'is_cover' => false,
-                    'is_kamar' => false,
+                    'isCover' => false,
+                    'isKamar' => $index === 0 || $index === 1,
                 ]);
             }
         }
