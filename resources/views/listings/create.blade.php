@@ -1,4 +1,4 @@
-@extends('layouts.home')
+@extends('layouts.form')
 
 @section('content')
 <div class="max-w-3xl mx-auto px-4 py-10">
@@ -100,21 +100,37 @@
             {{-- Location --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-1">
-                    Lokasi
+                    Alamat Lengkap
                 </label>
-                <select
+                <input
+                    type="text"
                     name="location_value"
                     class="w-full rounded-xl border-gray-300 focus:ring-rose-500 focus:border-rose-500"
                     required
                 >
-                    <option value="">Pilih lokasi</option>
-                    <option value="Badung">Badung</option>
-                    <option value="Gianyar">Gianyar</option>
-                    <option value="Denpasar">Denpasar</option>
-                    <option value="Tabanan">Tabanan</option>
-                    <option value="Buleleng">Buleleng</option>
-                </select>
+                </input>
                 @error('location_value')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Leaflet --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-1">
+                    Tentukan lokasi penginapan anda
+                </label>
+                <div class="relative z-0 overflow-hidden rounded-xl">
+                    <div id="map" class="w-full h-[400px]"></div>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">
+                    Klik peta atau geser pin untuk menentukan lokasi
+                </p>
+                <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
+                <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+                @error('latitude')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+                @error('longitude')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
             </div>
