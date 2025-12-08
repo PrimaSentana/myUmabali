@@ -38,7 +38,7 @@ class PenginapanController extends Controller
             'category' => ['required'],
             'facilities' => ['array'],
             'images' => ['array'],
-            'price' => ['required']
+            'price' => ['required'],
         ]);
 
         $listings = Listings::create([
@@ -51,6 +51,8 @@ class PenginapanController extends Controller
             'bathroom_count' => request('bathroom_count'),
             'location_value' => request('location_value'),
             'price' => request('price'),
+            'latitude' => request('latitude'),
+            'longitude' => request('longitude'),
             'user_id' => Auth::id()
         ]);
 
