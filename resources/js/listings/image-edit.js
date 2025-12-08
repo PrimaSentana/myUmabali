@@ -1,7 +1,18 @@
 export function imageEdit() {
     const preview = document.getElementById('image-preview');
+    const input = document.getElementById('images-edit');
     const removedImages = new Set();
     let selectedFiled = [];
+
+    const dataTransfer = new DataTransfer();
+
+    input.addEventListener('change', () => {
+        for (const file of input.files) {
+            dataTransfer.items.add(file);
+        }
+        input.files = dataTransfer.files;
+        render();
+    });
 
     preview.addEventListener('click', function (e) {
         if(!e.target.classList.contains('remove-image')) return;
@@ -16,4 +27,5 @@ export function imageEdit() {
 
         wrapper.remove();
     });
+
 }
