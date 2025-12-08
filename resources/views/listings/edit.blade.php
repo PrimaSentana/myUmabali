@@ -10,7 +10,7 @@
             Lengkapi detail penginapan kamu seperti di Airbnb
         </p>
 
-        <form method="POST" action="{{ route('listings.update', $listings) }}" enctype="multipart/form-data" class="space-y-6">
+        <form method="POST" action="{{ route('listings.update', $listings->id) }}" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PATCH')
             {{-- title --}}
@@ -234,7 +234,7 @@
                 </label>
 
                 <input
-                    id="images"
+                    id="images-edit"
                     type="file"
                     name="images[]"
                     multiple
