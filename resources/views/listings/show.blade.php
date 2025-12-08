@@ -1,3 +1,10 @@
+<script>
+    window.listingLocation = {
+        lat: {{ $listings->latitude }},
+        lng: {{ $listings->longitude }},
+    };
+</script>
+
 @extends('layouts.penginapan')
 @section('content')
     <div class="container mx-auto px-4 py-8 text-[#1b1b18]">
@@ -74,7 +81,16 @@
             <div>
                 <h2 class="text-lg font-semibold mb-2">Lokasi penginapan</h2>
                 <p class="text-sm text-gray-600 mb-3">{{ $listings->location_value }}</p>
-                <div class="bg-gray-200 h-64 flex items-center justify-center text-gray-500 rounded-xl">MAPS</div>
+                <div id="preview-map" class="w-full h-96 rounded-xl border"></div>
+                <div class="mt-2">
+                    <a
+                        href="https://www.google.com/maps?q={{ $listings->latitude }},{{ $listings->longitude }}"
+                        target="_blank"
+                        class="text-sm text-airbnb underline"
+                        >
+                        Lihat di Google Maps
+                    </a>
+                </div>
             </div>
         </div>
 
