@@ -114,7 +114,7 @@
                 @enderror
             </div>
 
-            {{-- Leaflet --}}
+            {{-- map --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-1">
                     Tentukan lokasi penginapan anda
@@ -126,7 +126,7 @@
                     Klik peta atau geser pin untuk menentukan lokasi
                 </p>
                 <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
-                <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+                <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude')}}">
                 @error('latitude')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
