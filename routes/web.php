@@ -27,8 +27,8 @@ Route::get('/', [PenginapanController::class, 'index'])->name('xdashboard');
 Route::get('/form/penginapan', [PenginapanController::class, 'create'])->name('listings.create');
 
 Route::get('/penginapan/{listings}/edit', [PenginapanController::class, 'edit'])->name('listings.edit');
+Route::post('/penginapan', [PenginapanController::class, 'store'])->name('listings.store')->middleware('auth');
 Route::patch('/penginapan/{id}', [PenginapanController::class, 'update'])->name('listings.update')->middleware('auth');
-
-Route::post('/penginapan', [PenginapanController::class, 'store'])->middleware('auth');
+Route::delete('/penginapan/{id}/delete', [PenginapanController::class, 'destroy'])->name('listings.destroy')->middleware('auth');
 
 Route::get('/penginapan/{id}', [PenginapanController::class, 'show'])->name('listings.show');
