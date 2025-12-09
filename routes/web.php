@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PenginapanController;
 use App\Http\Controllers\ProfileController;
 use App\Models\Dummy;
@@ -28,7 +29,13 @@ Route::get('/form/penginapan', [PenginapanController::class, 'create'])->name('l
 
 Route::get('/penginapan/{listings}/edit', [PenginapanController::class, 'edit'])->name('listings.edit');
 Route::post('/penginapan', [PenginapanController::class, 'store'])->name('listings.store')->middleware('auth');
+Route::post('/penginapan/favorite/{id}', [PenginapanController::class, 'favorite'])->name('listings.favorite')->middleware('auth');
+Route::post('/penginapan/favorite/{id}/cancel', [PenginapanController::class, 'cancelFavorite'])->name('listings.xfavorite')->middleware('auth');
+
 Route::patch('/penginapan/{id}', [PenginapanController::class, 'update'])->name('listings.update')->middleware('auth');
 Route::delete('/penginapan/{id}/delete', [PenginapanController::class, 'destroy'])->name('listings.destroy')->middleware('auth');
 
 Route::get('/penginapan/{id}', [PenginapanController::class, 'show'])->name('listings.show');
+
+Route::get('/favorite', [MenuController::class, 'favorite'])->name('menu.favorite')->middleware('auth');
+Route::get('/penginapan-anda', [MenuController::class, 'penginapan'])->name('menu.penginapan')->middleware('auth');
