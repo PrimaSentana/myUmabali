@@ -13,14 +13,17 @@
         <h1 class="text-xl font-medium mb-4">{{ $listings->title }}, Kamar untuk {{ $listings->guest_count }} orang</h1>
         <div class="flex gap-8 mr-8">
             @can('update', $listings)
-                <a href="{{ route('listings.edit', $listings) }}" class="text-xl font-medium underline">Edit</a>
+                <a href="{{ route('listings.edit', $listings) }}" class="text-slate-700 font-medium hover:underline">Edit</a>
             @endcan
 
             @can('delete', $listings)
-                <form method="POST">
-                    @method('DELETE')
-                    <button class="text-xl font-medium underline">Hapus</button>
-                </form>
+                <button type="button" onclick="openModal('delete-listing-{{ $listings->id }}')" class="text-red-600 hover:underline font-medium">Delete</button>
+                <x-delete-modal
+                    :id="'delete-listing-' . $listings->id"
+                    :action="route('listings.destroy', $listings->id)"
+                    title="Hapus penginapan?"
+                    message="Penginapan ini akan dihapus permanen dan tidak bisa dikembalikan."
+                />
             @endcan
         </div>
     </div>
