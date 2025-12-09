@@ -16,3 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
     imageUpload();
     imageEdit();
 });
+
+window.openModal = function(id) {
+    document.getElementById(id).classList.remove('hidden');
+    document.getElementById(id).classList.add('flex')
+}
+
+window.closeModal = function(id) {
+    document.getElementById(id).classList.add('hidden');
+    document.getElementById(id).classList.remove('flex');
+}
