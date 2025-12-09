@@ -39,7 +39,7 @@ class PenginapanController extends Controller
             'bathroom_count' => ['required'],
             'location_value' => ['required'],
             'category' => ['required'],
-            'facilities' => ['array'],
+            'facilities' => ['array', 'required', 'min:1'],
             'images' => ['array'],
             'price' => ['required'],
         ]);
@@ -115,7 +115,7 @@ class PenginapanController extends Controller
             'bathroom_count' => ['required'],
             'location_value' => ['required'],
             'category' => ['required'],
-            'facilities' => ['array'],
+            'facilities' => ['array', 'required', 'min:1'],
             'images' => ['array'],
             'price' => ['required'],
         ]);
@@ -165,9 +165,17 @@ class PenginapanController extends Controller
         return redirect(route('listings.show', $listings->id));
     }
     
-    public function destroy(Listings $listings) {
-        $this->authorize('delete', $listings);
+    public function destroy($id) {
+        $listings = Listings::findOrFail($id);
+        
+        foreach ($listings->images as $image) {
+            Storage::disk('public')->delete($image->image_path);
+            $image->delete();
+        }
 
+        $listings->facilities()->detach();
         $listings->delete();
+
+        return redirect(route('xdashboard'));
     }
 }
