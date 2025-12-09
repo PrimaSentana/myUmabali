@@ -249,8 +249,17 @@
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
 
-                {{-- preview --}}
-                <div id="image-preview" class="grid grid-cols-3 gap-4 mt-4">
+                {{-- preview baru --}}
+                <p class="text-lg text-gray-400 mt-1">
+                    gambar baru akan tampil di sini!
+                </p>
+                <div id="preview" class="grid grid-cols-3 gap-4 mt-4"></div>
+
+                {{-- preview lama --}}
+                <p class="text-lg text-gray-400 mt-1">
+                    list gambar
+                </p>
+                <div id="image-preview-lama" class="grid grid-cols-3 gap-4 mt-4">
                     @foreach ($listings->images as $image)
                         <div class="relative image-item" data-existing="true" data-id="{{ $image->id }}">
                             <img src="{{ asset('storage/' . $image->image_path) }}" class=" w-full h-32 object-cover rounded-lg">
