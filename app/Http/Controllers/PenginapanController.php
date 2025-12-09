@@ -9,6 +9,8 @@ use App\Models\Listings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Wishlist;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,9 +19,10 @@ class PenginapanController extends Controller
     public function test() { //ngetest azahhh
         dd(request()->all());
     }
-    public function index() {
+    public function index(Listings $listings) {
         $listings = Listings::all();
-        return view('xdashboard', ['listings' => $listings]);
+        $user = User::find(Auth::id());
+        return view('xdashboard', ['listings' => $listings, 'user' => $user]);
     }
     
     public function create() {
@@ -177,5 +180,25 @@ class PenginapanController extends Controller
         $listings->delete();
 
         return redirect(route('xdashboard'));
+    }
+
+    public function favorite() {
+        $user = User::find(Auth::id());
+        
+        if(request()->filled('listings_id')) {
+            $user->favorites()->attach(request()->listings_id);
+        }
+
+        return redirect()->back();
+    }
+
+    public function cancelFavorite() {
+        $user = User::find(Auth::id());
+        
+        if(request()->filled('listings_id')) {
+            $user->favorites()->detach(request()->listings_id);
+        }
+
+        return redirect()->back();
     }
 }

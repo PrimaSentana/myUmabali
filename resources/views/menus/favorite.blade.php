@@ -1,8 +1,11 @@
 @extends('layouts.home')
 @section('content')
     <div>
-        <h2 class="text-2xl font-bold mb-6">Popular homes</h2>
-        <div class="flex flex-wrap gap-4">
+        <div>
+            <h1 class="text-4xl font-medium">Favorite</h1>
+            <p>Daftar penginapan favorite anda!</p>
+        </div>
+        <div class="flex flex-wrap gap-8 mt-4">
             @foreach($listings as $listing)
                 <x-home-card 
                     :id="$listing->id"
