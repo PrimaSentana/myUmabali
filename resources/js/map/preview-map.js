@@ -12,8 +12,4 @@ export function previewMap() {
     }).addTo(map);
 
     const marker = L.marker([lat, lng]).addTo(map).bindPopup('Penginapan Anda!').openPopup();
-
-    setTimeout(() => {
-        map.invalidateSize();
-    }, 500);
 }
