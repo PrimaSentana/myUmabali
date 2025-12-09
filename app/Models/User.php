@@ -49,4 +49,8 @@ class User extends Authenticatable
     public function canAccessFilament(): bool {
         return $this->is_admin === true;
     }
+
+    public function listings() {
+        return $this->hasMany(Listings::class);
+    }
 }
