@@ -15,14 +15,25 @@
                     </button>
                 </form>
             @else
-                <form action="{{ route('listings.favorite', $id) }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="listings_id" value="{{ $id }}">
-                    <button type="submit" class="group absolute top-2 left-2 bg-white w-32 hover:bg-[#eb4c60] transition hover:text-white active:bg-[#e72842] text-sm font-semibold px-2 py-1 rounded-md shadow">
-                        <span class="block group-hover:hidden">Add to favorite</span>
-                        <span class="hidden group-hover:block">Favorite</span>
-                    </button>
-                </form>
+                @auth
+                    <form action="{{ route('listings.favorite', $id) }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="listings_id" value="{{ $id }}">
+                        <button type="submit" class="group absolute top-2 left-2 bg-white w-32 hover:bg-[#eb4c60] transition hover:text-white active:bg-[#e72842] text-sm font-semibold px-2 py-1 rounded-md shadow">
+                            <span class="block group-hover:hidden">Add to favorite</span>
+                            <span class="hidden group-hover:block">Favorite</span>
+                        </button>
+                    </form>
+                @endauth
+                @guest
+                    <a href="/login">
+                        <input type="hidden" name="listings_id" value="{{ $id }}">
+                        <button type="submit" class="group absolute top-2 left-2 bg-white w-32 hover:bg-[#eb4c60] transition hover:text-white active:bg-[#e72842] text-sm font-semibold px-2 py-1 rounded-md shadow">
+                            <span class="block group-hover:hidden">Add to favorite</span>
+                            <span class="hidden group-hover:block">Favorite</span>
+                        </button>
+                    </a>
+                @endguest
             @endif
         </div>
         <div class="p-3">
