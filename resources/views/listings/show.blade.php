@@ -109,36 +109,31 @@
         </div>
 
         <!-- kanan (card harga)
-            TODO: ubah jadi form
+            TODO: ubah jadi form (kalo perlu)
         -->
+        
         <div class="md:w-1/3">
-            <div class="border rounded-xl shadow-md p-5 sticky top-24">
-                <p class="text-xl font-semibold">{{ $listings->price }} <span class="text-sm font-normal text-gray-500">/ malam</span></p>
-                <div class="mt-4 border rounded-lg divide-y">
-                    <div class="grid grid-cols-2 text-sm">
+            <form action="/reservation/{{ $listings->id }}" method="POST">
+                @csrf
+                <div class="border rounded-xl shadow-md p-5 sticky top-24">
+                    <p class="text-xl font-semibold">Rp{{ number_format($listings->price)}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
+                    <div class="mt-4 border rounded-lg divide-y">
                         <div class="p-2">
-                            <label class="block text-gray-500">CHECK-IN</label>
-                            <p class="font-medium">12/10/2025</p> {{-- fix this --}}
+                            <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
+                            <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
                         </div>
-                        <div class="p-2 border-l">
-                            <label class="block text-gray-500">CHECK-OUT</label>
-                            <p class="font-medium">13/10/2025</p> {{-- fix this --}}
+                        <div class="p-2">
+                            <label id="guest_count" class="block text-gray-600">Tamu</label>
+                            <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
+                            <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
                         </div>
                     </div>
-                    <div class="p-2">
-                        <label class="block text-gray-500 text-sm">TAMU</label>
-                        <select class="w-full border-none text-sm font-medium focus:ring-0">
-                            <option>1 Tamu</option> {{-- fix this --}}
-                            <option>2 Tamu</option>
-                        </select>
-                    </div>
-                </div>
 
-                <button class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
-                    Pesan
-                </button>
-                {{-- <p class="text-center text-xs text-gray-500 mt-2">Anda belum dikenakan biaya</p> --}}
-            </div>
+                    <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
+                        Pesan
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
