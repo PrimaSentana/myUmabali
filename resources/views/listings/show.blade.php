@@ -116,7 +116,7 @@
             <form action="/reservation/{{ $listings->id }}" method="POST">
                 @csrf
                 <div class="border rounded-xl shadow-md p-5 sticky top-24">
-                    <p class="text-xl font-semibold">Rp{{ number_format($listings->price)}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
+                    <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
                     <div class="mt-4 border rounded-lg divide-y">
                         <div class="p-2">
                             <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
