@@ -15,10 +15,6 @@ export function leafletMap() {
     // marker draggable — tempat user pilih lokasi
     const marker = L.marker([defaultLat, defaultLng], {draggable: true}).addTo(map);
 
-    // setTimeout(() => {
-    //     map.invalidateSize();
-    // }, 100);
-
     // kalau klik map, pindahkan marker
     map.on('click', (e) => {
         marker.setLatLng(e.latlng);
