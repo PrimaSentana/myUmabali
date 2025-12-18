@@ -17,6 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     imageEdit();
 });
 
+flatpickr('#date_range', {
+    mode: 'range',
+    dateFormat: 'Y-m-d',
+    minDate: 'today',
+    disableMobile: true
+});
+
 window.openModal = function(id) {
     document.getElementById(id).classList.remove('hidden');
     document.getElementById(id).classList.add('flex')
