@@ -16,21 +16,31 @@ return new class extends Migration
     {
         Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Listings::class)->constrained();
-            $table->date('start_date');
-            $table->date('end_date');
-            $table->decimal('total_price');
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Listings::class)->constrained()->cascadeOnDelete();
+            $table->date('check_in');
+            $table->date('check_out');
+            $table->integer('guest_count');
+            $table->integer('total_price');
+            $table->string('payment_status')->default('pending');
+            $table->string('order_id')->nullable();
+            $table->string('snap_token');
             $table->timestamps();
         });
 
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Reservation::class)->constrained();
-            $table->decimal('amounts');
-            $table->string('payment_method');
-            $table->string('payment_status');
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Reservation::class)->constrained()->cascadeOnDelete();
+            $table->string('order_id')->unique();
+            $table->string('transaction_id')->nullable();
+            $table->string('snap_token')->nullable();
+            $table->decimal('amount', 12, 2);
+            $table->string('payment_type')->nullable();
+            $table->string('payment_method')->nullable();
+            $table->string('payment_status')->nullable();
+            $table->string('fraud_status')->nullable();
+            $table->timestamp('transaction_time')->nullable();
             $table->timestamps();
         });
     }
