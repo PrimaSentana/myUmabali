@@ -24,6 +24,20 @@ flatpickr('#date_range', {
     disableMobile: true
 });
 
+document.getElementById('pay-button').addEventListener('click', function () {
+    window.snap.pay('{{ $snapToken }}', {
+        onSuccess: function(result){
+            console.log(result);
+        },
+        onPending: function(result){
+            console.log(result);
+        },
+        onError: function(result){
+            console.log(result);
+        }
+    });
+});
+
 window.openModal = function(id) {
     document.getElementById(id).classList.remove('hidden');
     document.getElementById(id).classList.add('flex')

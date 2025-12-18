@@ -40,7 +40,8 @@ Route::get('/favorite', [MenuController::class, 'favorite'])->name('menu.favorit
 Route::get('/penginapan-anda', [MenuController::class, 'penginapan'])->name('menu.penginapan')->middleware('auth');
 
 // Reservasi
-Route::get('/checkout/{id}', [ReservationController::class, 'index'])->name('reservation.checkout')->middleware('auth');
+Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.my')->middleware('auth');
+Route::get('/checkout/{id}', [ReservationController::class, 'checkout'])->name('reservation.checkout')->middleware('auth');
 Route::post('/reservation/{id}', [ReservationController::class, 'store'])->name('reservation.store')->middleware('auth');
 Route::patch('/reservation/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel')->middleware('auth');
 

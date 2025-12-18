@@ -26,7 +26,16 @@ class ReservationController extends Controller
         dd([$checkIn, $checkOut, $nights, $total_price]);
     }
 
-    public function index($id) {
+    public function index() {
+        $reservations = Reservation::where('user_id', Auth::id())
+        ->orderByRaw("FIELD(payment_status, 'pending', 'paid', 'cancelled')")
+        ->orderBy('check_in', 'asc')
+        ->get();
+
+        return view('menus.reservation', ['reservations' => $reservations]);
+    }
+
+    public function checkout($id) {
         $reservation = Reservation::find($id);
 
         $snapToken = $reservation->snap_token;
