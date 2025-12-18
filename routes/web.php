@@ -3,13 +3,13 @@
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\PenginapanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use App\Models\Dummy;
+use App\Models\Reservation;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use function Livewire\store;
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -25,17 +25,26 @@ require __DIR__.'/auth.php';
 
 Route::get('/', [PenginapanController::class, 'index'])->name('xdashboard');
 
+// Listings
 Route::get('/form/penginapan', [PenginapanController::class, 'create'])->name('listings.create');
-
 Route::get('/penginapan/{listings}/edit', [PenginapanController::class, 'edit'])->name('listings.edit');
 Route::post('/penginapan', [PenginapanController::class, 'store'])->name('listings.store')->middleware('auth');
 Route::post('/penginapan/favorite/{id}', [PenginapanController::class, 'favorite'])->name('listings.favorite')->middleware('auth');
 Route::post('/penginapan/favorite/{id}/cancel', [PenginapanController::class, 'cancelFavorite'])->name('listings.xfavorite')->middleware('auth');
-
 Route::patch('/penginapan/{id}', [PenginapanController::class, 'update'])->name('listings.update')->middleware('auth');
 Route::delete('/penginapan/{id}/delete', [PenginapanController::class, 'destroy'])->name('listings.destroy')->middleware('auth');
-
 Route::get('/penginapan/{id}', [PenginapanController::class, 'show'])->name('listings.show');
 
+// Menu
 Route::get('/favorite', [MenuController::class, 'favorite'])->name('menu.favorite')->middleware('auth');
 Route::get('/penginapan-anda', [MenuController::class, 'penginapan'])->name('menu.penginapan')->middleware('auth');
+
+// Reservasi
+Route::get('/checkout/{id}', [ReservationController::class, 'index'])->name('reservation.checkout')->middleware('auth');
+Route::post('/reservation/{id}', [ReservationController::class, 'store'])->name('reservation.store')->middleware('auth');
+Route::patch('/reservation/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel')->middleware('auth');
+
+// testing doang ngab
+Route::get('/testing', function() {
+    return view('testing');
+});
