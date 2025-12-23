@@ -36,7 +36,7 @@
 
         <div class="grid grid-rows-2 gap-2">
             @foreach ($images as $image)
-                <div class="h-64 bg-gray-200 rounded-xl overflow-visible">
+                <div class="h-full bg-gray-200 rounded-xl overflow-visible">
                     <img src="{{ asset('storage/' . $image->image_path)}}" alt="{{ $listings->title }}" class="w-full h-full object-cover">
                 </div>
             @endforeach
@@ -73,7 +73,7 @@
 
             <div>
                 <h2 class="text-lg font-semibold mb-2">Kamar Anda</h2>
-                <div class="bg-gray-200 rounded-lg h-70 w-180 flex items-center justify-center text-gray-500">
+                <div class="bg-gray-200 rounded-lg h-64 w-180 flex items-center justify-center text-gray-500">
                     <img src="{{ asset('storage/' . $listings->kamarImage->image_path) }}" alt="{{ $listings->title }}" class="w-full h-full object-cover rounded-lg">
                 </div>
                 <p class="text-sm text-gray-600 mt-2">{{ $listings->room_count }} tempat tidur</p>
