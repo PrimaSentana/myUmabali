@@ -39,9 +39,14 @@
                 </a>
             @endif
 
+            <x-secondary-button class="ms-3">
+                <a href="/register">Register</a>
+            </x-secondary-button>
+
             <x-primary-button class="ms-3">
                 {{ __('Log in') }}
             </x-primary-button>
+            
         </div>
     </form>
 </x-guest-layout>

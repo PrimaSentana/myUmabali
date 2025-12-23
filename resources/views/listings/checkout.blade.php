@@ -1,8 +1,10 @@
 @extends('layouts.penginapan')
 @section('content')
     <div class="flex justify-center p-6 min-h-36 space-x-5">
-        <div class="">
-            <a href="/penginapan/{{ $reservation->listings->id }}" class="text-lg font-bold hover:underline">Back</a>
+        <div class="mt-2 mr-2">
+            <a href="{{ route('reservation.my') }}" class="text-lg font-bold hover:underline ">
+                <img src="{{ asset('images/arrow-left1.svg' ) }}" alt="arrow-back" class="w-6 h-auto">
+            </a>
         </div>
         <div class="w-full max-w-md bg-white border border-gray-200 rounded-3xl p-6 shadow-sm">
             

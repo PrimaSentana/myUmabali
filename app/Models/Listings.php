@@ -36,4 +36,8 @@ class Listings extends Model
     public function favorites() {
         return $this->belongsToMany(User::class);
     }
+
+    public function reviews() {
+        return $this->hasMany(Reviews::class);
+    }
 }

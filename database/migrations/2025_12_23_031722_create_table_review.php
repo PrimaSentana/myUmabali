@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Listings;
+use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,10 +14,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('wishlists', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Listings::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Reservation::class)->constrained()->cascadeOnDelete();
+            $table->smallInteger('rating');
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('wishlists');
+        Schema::dropIfExists('reviews');
     }
 };

@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\PenginapanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ReviewController;
 use App\Models\Dummy;
 use App\Models\Reservation;
 use Illuminate\Support\Arr;
@@ -37,13 +39,21 @@ Route::get('/penginapan/{id}', [PenginapanController::class, 'show'])->name('lis
 
 // Menu
 Route::get('/favorite', [MenuController::class, 'favorite'])->name('menu.favorite')->middleware('auth');
-Route::get('/penginapan-anda', [MenuController::class, 'penginapan'])->name('menu.penginapan')->middleware('auth');
+Route::get('/owner/penginapan', [MenuController::class, 'penginapan'])->name('menu.penginapan')->middleware('auth');
 
 // Reservasi
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.my')->middleware('auth');
 Route::get('/checkout/{id}', [ReservationController::class, 'checkout'])->name('reservation.checkout')->middleware('auth');
 Route::post('/reservation/{id}', [ReservationController::class, 'store'])->name('reservation.store')->middleware('auth');
 Route::patch('/reservation/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel')->middleware('auth');
+
+//Booking
+Route::get('/owner/booking', [OwnerController::class, 'index'])->name('booking.my')->middleware('auth');
+Route::get('/owner/booking/{reservation}', [OwnerController::class, 'show'])->name('booking.show')->middleware('auth');
+
+// review
+Route::get('/reservation/{id}/review', [ReviewController::class, 'create'])->name('review.create')->middleware('auth');
+Route::post('/reservation/{id}/review', [ReviewController::class, 'store'])->name('review.store')->middleware('auth');
 
 // testing doang ngab
 Route::get('/testing', function() {
