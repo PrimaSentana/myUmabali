@@ -30,7 +30,7 @@ Route::get('/', [PenginapanController::class, 'index'])->name('xdashboard');
 // Listings
 Route::get('/form/penginapan', [PenginapanController::class, 'create'])->name('listings.create');
 Route::get('/penginapan/{listings}/edit', [PenginapanController::class, 'edit'])->name('listings.edit');
-Route::post('/penginapan', [PenginapanController::class, 'store'])->name('listings.store')->middleware('auth');
+Route::post('/penginapan', [PenginapanController::class, 'test'])->name('listings.store')->middleware('auth');
 Route::post('/penginapan/favorite/{id}', [PenginapanController::class, 'favorite'])->name('listings.favorite')->middleware('auth');
 Route::post('/penginapan/favorite/{id}/cancel', [PenginapanController::class, 'cancelFavorite'])->name('listings.xfavorite')->middleware('auth');
 Route::patch('/penginapan/{id}', [PenginapanController::class, 'update'])->name('listings.update')->middleware('auth');
