@@ -35,12 +35,13 @@
                 <div class="flex flex-col justify-between items-end">
                     {{-- Pay --}}
                     @if($reservation->payment_status === 'pending')
-                        <button
+                        {{-- <button
                             class="px-4 py-2 bg-black text-white rounded-lg"
                             onclick="window.snap.pay('{{ $reservation->snap_token }}')"
                         >
                             Pay Now
-                        </button>
+                        </button> --}}
+                        <a href="{{ route('reservation.checkout', $reservation->id) }}" class="px-4 py-2 bg-black text-white rounded-lg">Pay Now</a>
                     @endif
                     {{-- Cancel --}}
                     @if(
@@ -54,6 +55,14 @@
                                 Cancel
                             </button>
                         </form>
+                    @endif
+                    @if($reservation->payment_status === 'paid' && !$reservation->review)
+                        <a href="{{ route('review.create', $reservation->id) }}"
+                            class="text-rose-500 font-medium">
+                            Leave a review
+                        </a>
+                    @elseif($reservation->payment_status === 'paid' && $reservation->review)
+                        <p class="text-gray-500">Already reviewed</p>
                     @endif
                 </div>
             </div>
