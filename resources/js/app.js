@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 flatpickr('#date_range', {
     mode: 'range',
-    dateFormat: 'j-M-Y',
+    dateFormat: 'd-M-Y',
     minDate: new Date().fp_incr(1),
     disableMobile: true
 });

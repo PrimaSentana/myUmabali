@@ -230,6 +230,6 @@ class PenginapanController extends Controller
             });
         })->get();
 
-        return view('xdashboard', ['listings' => $listings]);
+        return view('xdashboard', ['listings' => $listings, 'user' => User::findOrFail(Auth::id())]);
     }
 }

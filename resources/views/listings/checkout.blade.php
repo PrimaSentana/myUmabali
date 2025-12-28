@@ -95,13 +95,16 @@
     document.getElementById('pay-button').addEventListener('click', function () {
         window.snap.pay('{{ $snapToken }}', {
             onSuccess: function(result){
-                console.log(result);
+                window.location.href = '/reservation';
             },
             onPending: function(result){
-                console.log(result);
+                window.loaction.href = '/reservation';
             },
             onError: function(result){
-                console.log(result);
+                window.location.href = '/reservation';
+            },
+            onClose: function() {
+                alert("Pembayaran belum selesai");
             }
         });
     });
