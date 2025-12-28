@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Storage;
 class PenginapanController extends Controller
 {
     public function test() { //ngetest azahhh
-        dd(request()->all());
+        [$checkIn, $checkOut] = explode(' to ', request('date_range'));
+        dd([$checkIn, $checkOut]);
     }
     public function index(Listings $listings) {
         $listings = Listings::all();
@@ -200,5 +201,35 @@ class PenginapanController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function search() {
+        $location = request()->location_value;
+        if(request()->date_range) {
+            [$checkIn, $checkOut] = explode(' to ', request('date_range'));
+        } else {
+            $checkIn = null;
+            $checkOut = null;
+        }
+        $guest = request()->guest_count;
+
+        $listings = Listings::query()
+        ->when($location, function($q) use ($location) {
+            $q->where('location_value', 'like', '%' . $location . '%');
+        })
+        ->when($guest, function($q) use ($guest) {
+            $q->where('guest_count', ">=", $guest);
+        })
+        ->when($checkIn && $checkOut, function($query) use ($checkIn, $checkOut){
+            $query->whereDoesntHave('reservations', function($q) use ($checkIn, $checkOut) {
+                $q->whereIn('payment_status', ['paid'])
+                ->where(function ($q) use ($checkIn, $checkOut) {
+                    $q->where('check_in', '<', $checkOut)
+                    ->where('check_out', '>', $checkIn);
+                });
+            });
+        })->get();
+
+        return view('xdashboard', ['listings' => $listings]);
     }
 }

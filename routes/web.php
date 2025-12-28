@@ -55,6 +55,8 @@ Route::get('/owner/booking/{reservation}', [OwnerController::class, 'show'])->na
 Route::get('/reservation/{id}/review', [ReviewController::class, 'create'])->name('review.create')->middleware('auth');
 Route::post('/reservation/{id}/review', [ReviewController::class, 'store'])->name('review.store')->middleware('auth');
 
+Route::get('/search', [PenginapanController::class, 'search'])->name('listings.search');
+
 // testing doang ngab
 Route::get('/testing', function() {
     return view('testing');

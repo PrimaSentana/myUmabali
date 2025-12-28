@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 flatpickr('#date_range', {
     mode: 'range',
-    dateFormat: 'Y-m-d',
-    minDate: 'today',
+    dateFormat: 'j-M-Y',
+    minDate: new Date().fp_incr(1),
     disableMobile: true
 });
 
@@ -37,6 +37,8 @@ document.getElementById('pay-button').addEventListener('click', function () {
         }
     });
 });
+
+
 
 window.openModal = function(id) {
     document.getElementById(id).classList.remove('hidden');
