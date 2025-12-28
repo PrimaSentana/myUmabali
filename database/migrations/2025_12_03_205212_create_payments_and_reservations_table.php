@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('total_price');
             $table->string('payment_status')->default('pending');
             $table->string('order_id')->nullable();
-            $table->string('snap_token');
+            $table->string('snap_token')->nullable();
             $table->timestamps();
         });
 
