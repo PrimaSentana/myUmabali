@@ -16,68 +16,38 @@
     
 
     <!-- Tengah: Menu -->
-    @auth
-      <nav class="flex items-center space-x-2">
+    <nav class="flex items-center space-x-2 ">
+      <form action="/search" method="GET">
+        @csrf
         <div class="w-full flex justify-center py-4">
           <div class="bg-white shadow-xl rounded-full flex items-center divide-x divide-gray-300 overflow-hidden">
-          <!-- Lokasi -->
-          <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-              <p class="text-xs font-semibold text-gray-800">Lokasi</p>
-              <p class="text-sm text-gray-500">Cari Destinasi</p>
-          </div>
-          <!-- Tanggal -->
-          <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-              <p class="text-xs font-semibold text-gray-800">Tanggal</p>
-              <p class="text-sm text-gray-500">Tambahkan Tanggal</p>
-          </div>
-          <!-- Tamu -->
-          <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-              <p class="text-xs font-semibold text-gray-800">Tamu</p>
-              <p class="text-sm text-gray-500">Tambahkan Tamu</p>
-          </div>
-          <!-- Tombol Cari -->
-          <button class="bg-black text-white rounded-full p-3 my-2 mx-4 flex items-center justify-center hover:bg-gray-800">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                  stroke-width="2" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                      d="m21 21-4.35-4.35m0 0a7.5 7.5 0 1 0-10.6-10.6 7.5 7.5 0 0 0 10.6 10.6z"/>
-              </svg>
-          </button>
-          </div>
-      </div>
+            <!-- Lokasi -->
+            <div class="px-4 py-2 cursor-pointer">
+                <p class="text-xs text-center font-semibold text-gray-800">Lokasi</p>
+                <input type="text" id="location_value" name="location_value" class="w-full h-8 mt-2 text-center rounded-xl border-none focus:ring-rose-500 focus:border-rose-500" placeholder="Jimbaran, Badung">
+            </div>
+            <!-- Tanggal -->
+            <div class="px-3 py-2 cursor-pointer">
+                <p class="text-xs text-center font-semibold text-gray-800">Tanggal</p>
+                <input required type="text" id="date_range" name="date_range" placeholder="Hari ini" class="w-64 h-8 mt-2 text-center rounded-xl border-none focus:ring-rose-500 focus:border-rose-500">
+            </div>
+            <!-- Tamu -->
+            <div class="px-3 py-2 cursor-pointer">
+                <p class="text-xs text-center font-semibold text-gray-800">Tamu</p>
+                <input type="number" id="guest_count" placeholder="1" name="guest_count" class="w-24 h-8 mt-2 rounded-xl text-center border-none focus:ring-rose-500 focus:border-rose-500">
+            </div>
+            <!-- Tombol Cari -->
+            <button type="submit" class="bg-black text-white rounded-full p-3 my-2 mx-4 flex items-center justify-center hover:bg-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                        d="m21 21-4.35-4.35m0 0a7.5 7.5 0 1 0-10.6-10.6 7.5 7.5 0 0 0 10.6 10.6z"/>
+                </svg>
+            </button>
+            </div>
+        </div>
+      </form>
     </nav>
-    @endauth
-    @guest
-      <nav class="flex items-center ml-30 space-x-2">
-        <div class="w-full flex justify-center py-4">
-          <div class="bg-white shadow-xl rounded-full flex items-center divide-x divide-gray-300 overflow-hidden">
-          <!-- Lokasi -->
-          <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-              <p class="text-xs font-semibold text-gray-800">Lokasi</p>
-              <p class="text-sm text-gray-500">Cari Destinasi</p>
-          </div>
-          <!-- Tanggal -->
-          <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-              <p class="text-xs font-semibold text-gray-800">Tanggal</p>
-              <p class="text-sm text-gray-500">Tambahkan Tanggal</p>
-          </div>
-          <!-- Tamu -->
-          <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-              <p class="text-xs font-semibold text-gray-800">Tamu</p>
-              <p class="text-sm text-gray-500">Tambahkan Tamu</p>
-          </div>
-          <!-- Tombol Cari -->
-          <button class="bg-black text-white rounded-full p-3 my-2 mx-4 flex items-center justify-center hover:bg-gray-800">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                  stroke-width="2" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                      d="m21 21-4.35-4.35m0 0a7.5 7.5 0 1 0-10.6-10.6 7.5 7.5 0 0 0 10.6 10.6z"/>
-              </svg>
-          </button>
-          </div>
-      </div>
-    </nav>
-    @endguest
 
     <!-- Kanan: Aksi -->
     <div class="flex items-center space-x-4">

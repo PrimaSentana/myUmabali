@@ -37,6 +37,10 @@ class Listings extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function reservations() {
+        return $this->hasMany(Reservation::class);
+    }
+
     public function reviews() {
         return $this->hasMany(Reviews::class);
     }
