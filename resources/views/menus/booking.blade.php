@@ -1,6 +1,6 @@
 @extends('layouts.penginapan')
 @section('content')
-    <div class="max-w-6xl mx-auto px-4 py-10 space-y-6">
+    <div class="flex flex-col gap-4 max-w-6xl mx-auto px-4 py-10">
 
         <h1 class="text-2xl font-semibold">Incoming Booking</h1>
 
