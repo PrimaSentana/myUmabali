@@ -50,7 +50,7 @@
                                         {{ ucfirst($booking->payment_status) }}
                                     </span>
                                 </td>
-                                <td class="text-center">Rp{{ number_format($booking->total_price) }}</td>
+                                <td class="text-center">Rp{{ number_format($booking->total_price - ($booking->total_price * 10 / 100)) }}</td>
                             </tr>
                         @empty
                             <tr>
