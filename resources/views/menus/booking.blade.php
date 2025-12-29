@@ -31,15 +31,26 @@
                         </p>
                     </div>
                     {{-- Status --}}
-                    <div class="flex items-center">
-                        <span class="px-3 py-1 text-xs rounded-full
+                    <div class="flex flex-col justify-between items-end">
+                        <div class="px-3 py-1 text-xs rounded-full
                             @if($reservation->payment_status === 'paid') bg-green-100 text-green-700
                             @elseif($reservation->payment_status === 'pending') bg-yellow-100 text-yellow-700
                             @elseif($reservation->payment_status === 'cancelled') bg-red-100 text-red-700
                             @endif
                         ">
                             {{ ucfirst($reservation->payment_status) }}
-                        </span>
+                        </div>
+                        @if ($reservation->payment_status == 'paid' && \Carbon\Carbon::parse($reservation->check_out)->isPast())
+                            <div>
+                                <form action="{{ route('reservation.completed', $reservation->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="text-sm text-gray-500 mt-2 transition hover:text-blue-500">
+                                        Mark as Completed
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </a>

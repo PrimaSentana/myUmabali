@@ -66,4 +66,8 @@ class User extends Authenticatable
     public function reviews() {
         return $this->hasMany(Reviews::class);
     }
+
+    public function balance() {
+        return $this->hasOne(Balance::class);
+    }
 }

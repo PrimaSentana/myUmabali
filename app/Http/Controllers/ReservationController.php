@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Balance;
 use App\Models\Listings;
 use App\Models\Reservation;
 use App\Services\MidtransService;
@@ -35,7 +36,7 @@ class ReservationController extends Controller
 
     public function index() {
         $reservations = Reservation::where('user_id', Auth::id())
-        ->orderByRaw("FIELD(payment_status, 'pending', 'paid', 'cancelled')")
+        ->orderByRaw("FIELD(payment_status, 'pending', 'paid', 'cancelled', 'failed')")
         ->orderBy('check_in', 'asc')
         ->get();
 
@@ -221,5 +222,33 @@ class ReservationController extends Controller
         ]);
         
         return back()->with('success', 'Reservasi berhasil dibatalkan');
+    }
+
+    public function completed($id) {
+        $reservation = Reservation::findOrFail($id);
+
+        if($reservation->listings->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if(!in_array($reservation->payment_status, ['paid'])) {
+            return back()->withErrors('Booking tidak dapat dibatalkan');
+        }
+
+        if(!Carbon::parse($reservation->check_out)->isPast()) {
+            return back()->withErrors('Reservasi masih berjalan');
+        }
+
+        $reservation->update([
+            'payment_status' => 'completed'
+        ]);
+
+        $balance = Balance::findOrFail($reservation->listings->user_id)->balance;
+
+        Balance::findOrFail($reservation->listings->user_id)->update([
+            'balance' => $balance + ($reservation->total_price - ($reservation->total_price * 10 / 100))
+        ]);
+
+        return back()->with('success', "Reservasi selesai");
     }
 }

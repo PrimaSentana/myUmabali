@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 
 use function Livewire\store;
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [OwnerController::class, 'summary'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -46,6 +44,7 @@ Route::get('/reservation', [ReservationController::class, 'index'])->name('reser
 Route::get('/checkout/{id}', [ReservationController::class, 'checkout'])->name('reservation.checkout')->middleware('auth');
 Route::post('/reservation/{id}', [ReservationController::class, 'store'])->name('reservation.store')->middleware('auth');
 Route::patch('/reservation/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel')->middleware('auth');
+Route::patch('/reservation/{id}/completed', [ReservationController::class, 'completed'])->name('reservation.completed')->middleware('auth');
 
 //Booking
 Route::get('/owner/booking', [OwnerController::class, 'index'])->name('booking.my')->middleware('auth');

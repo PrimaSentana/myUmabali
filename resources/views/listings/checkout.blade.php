@@ -47,7 +47,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="font-bold text-gray-800">Tamu</h3>
-                        <p class="text-sm text-gray-600">1 dewasa</p>
+                        <p class="text-sm text-gray-600">{{ $reservation->guest_count }} dewasa</p>
                     </div>
                 </div>
             </div>
