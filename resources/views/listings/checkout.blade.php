@@ -47,7 +47,7 @@
                 <div class="flex justify-between items-center">
                     <div>
                         <h3 class="font-bold text-gray-800">Tamu</h3>
-                        <p class="text-sm text-gray-600">1 dewasa</p>
+                        <p class="text-sm text-gray-600">{{ $reservation->guest_count }} dewasa</p>
                     </div>
                 </div>
             </div>
@@ -95,13 +95,16 @@
     document.getElementById('pay-button').addEventListener('click', function () {
         window.snap.pay('{{ $snapToken }}', {
             onSuccess: function(result){
-                console.log(result);
+                window.location.href = '/reservation';
             },
             onPending: function(result){
-                console.log(result);
+                window.loaction.href = '/reservation';
             },
             onError: function(result){
-                console.log(result);
+                window.location.href = '/reservation';
+            },
+            onClose: function() {
+                alert("Pembayaran belum selesai");
             }
         });
     });

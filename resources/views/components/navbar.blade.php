@@ -148,6 +148,9 @@
           <a href="{{ route('menu.penginapan') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-b-lg">
             Penginapan
           </a>
+          <a href="{{ route('booking.my') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 rounded-b-lg">
+            Booking List
+          </a>
         </div>
       </div>
     </div>

@@ -2,33 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Balance;
 use App\Models\Listings;
 use App\Models\Reservation;
 use App\Services\MidtransService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Midtrans\Config;
 use Midtrans\Notification;
 
 class ReservationController extends Controller
 {
     public function test($id) {
+        $dateLength = strlen(request()->date_range);
+        if($dateLength <= 11) {
+            dd("tanggal tidak valid");
+        }
+
+
         $listings = Listings::findOrFail($id);
         [$checkIn, $checkOut] = explode(' to ', request('date_range'));
 
         $checkIn = Carbon::parse($checkIn);
         $checkOut = Carbon::parse($checkOut);
 
-        $nights = $checkIn->diffInDays($checkOut);
-        $total_price = $listings->price * $nights;
+        // $nights = $checkIn->diffInDays($checkOut);
+        // $total_price = $listings->price * $nights;
 
-        dd([$checkIn, $checkOut, $nights, $total_price]);
+        dd($checkIn, $checkOut, $checkIn->gt($checkOut));
     }
 
     public function index() {
         $reservations = Reservation::where('user_id', Auth::id())
-        ->orderByRaw("FIELD(payment_status, 'pending', 'paid', 'cancelled')")
+        ->orderByRaw("FIELD(payment_status, 'pending', 'paid', 'cancelled', 'failed')")
         ->orderBy('check_in', 'asc')
         ->get();
 
@@ -54,14 +62,22 @@ class ReservationController extends Controller
     }
 
     public function store($id) {
+        $dateLength = strlen(request()->date_range);
+        if($dateLength <= 11) {
+            return back()->withErrors('Tanggal tidak valid');
+        }
+
         $listings = Listings::findOrFail($id);
 
         [$checkIn, $checkOut] = explode(' to ', request('date_range'));
         
         $tanggal_check_in = $checkIn;
         $tanggal_check_out = $checkOut;
+
+        $cekCheckIn = Carbon::parse($tanggal_check_in);
+        $cekCheckOut = Carbon::parse($tanggal_check_out);
         
-        if($tanggal_check_in >= $tanggal_check_out) {
+        if($cekCheckIn->gte($cekCheckOut)) {
             return back()->withErrors('Tanggal tidak valid');
         }
 
@@ -100,6 +116,15 @@ class ReservationController extends Controller
         ]);
 
         $params = [
+            'item_details' => [
+                [
+                    'id' => $orderId,
+                    'name' => Str::limit($listings->title, 50) . ' x ' . $days . ' malam',
+                    'quantity' => 1,
+                    'price' => $total,
+                    'category' => $listings->category->title
+                ]
+            ],
             'transaction_details' => [
                 'order_id' => $orderId,
                 'gross_amount' => $total
@@ -107,6 +132,11 @@ class ReservationController extends Controller
             'customer_details' => [
                 'first_name' => Auth::user()->name,
                 'email' => Auth::user()->email
+            ],
+            'callbacks' => [
+                'finish' => route('reservation.my'),
+                'unfinish' => route('reservation.checkout', ['id' => $reservation->id]),
+                'error' => route('reservation.my')
             ]
         ];
 
@@ -116,7 +146,7 @@ class ReservationController extends Controller
             'snap_token' => $snapToken
         ]);
 
-        return redirect(route('xdashboard'));
+        return redirect(route('reservation.checkout', ['id' => $reservation->id]));
     }
 
     // yg ini alternatif 
@@ -162,7 +192,7 @@ class ReservationController extends Controller
                 $reservation->update(['payment_status' => 'paid']);
             }
         } elseif ($status === 'settlement') {
-            $reservation->update(['payemnt_status' => 'paid']);
+            $reservation->update(['payment_status' => 'paid']);
         } elseif ($status === 'pending') {
             $reservation->update(['payment_status' => 'pending']);
         } elseif (in_array($status, ['deny', 'expire', 'cancel'])) {
@@ -192,5 +222,33 @@ class ReservationController extends Controller
         ]);
         
         return back()->with('success', 'Reservasi berhasil dibatalkan');
+    }
+
+    public function completed($id) {
+        $reservation = Reservation::findOrFail($id);
+
+        if($reservation->listings->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if(!in_array($reservation->payment_status, ['paid'])) {
+            return back()->withErrors('Booking tidak dapat dibatalkan');
+        }
+
+        if(!Carbon::parse($reservation->check_out)->isPast()) {
+            return back()->withErrors('Reservasi masih berjalan');
+        }
+
+        $reservation->update([
+            'payment_status' => 'completed'
+        ]);
+
+        $balance = Balance::findOrFail($reservation->listings->user_id)->balance;
+
+        Balance::findOrFail($reservation->listings->user_id)->update([
+            'balance' => $balance + ($reservation->total_price - ($reservation->total_price * 10 / 100))
+        ]);
+
+        return back()->with('success', "Reservasi selesai");
     }
 }
