@@ -88,13 +88,15 @@ class PenginapanController extends Controller
     }
     
     public function show($id){
+        $user = User::find(Auth::id());
         $listings = Listings::find($id);
         $images = $listings->images()
         ->where('isCover', false)
+        ->take(2)
         ->get();
         $facilities = $listings->facilities()->get();
 
-        return view('listings.show', ['listings' => $listings, 'images' => $images, 'facilities' => $facilities]);
+        return view('listings.show', ['listings' => $listings, 'images' => $images, 'facilities' => $facilities, 'user' => $user]);
     }
 
     public function edit(Listings $listings) {
@@ -230,6 +232,6 @@ class PenginapanController extends Controller
             });
         })->get();
 
-        return view('xdashboard', ['listings' => $listings, 'user' => User::findOrFail(Auth::id())]);
+        return view('xdashboard', ['listings' => $listings, 'user' => User::find(Auth::id())]);
     }
 }
