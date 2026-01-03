@@ -57,8 +57,8 @@
             </p>
 
             <div class="flex items-center gap-4 border-b pb-4">
-                <div class="w-12 h-12 rounded-full">
-                    <img src="{{ asset('storage/' . $listings->user->images) }}" alt="profile" class="rounded-full">
+                <div class="object-cover rounded-full">
+                    <img src="{{ asset('storage/' . $listings->user->images) }}" alt="profile" class="object-cover rounded-full w-12 h-12">
                 </div>
                 <div>
                     <p class="font-medium">Tuan Rumah: {{ $listings->user->name }}</p>

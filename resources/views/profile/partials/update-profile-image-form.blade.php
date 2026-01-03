@@ -15,8 +15,8 @@
 
         <div>
             <div class="flex gap-4">
-                <div class="flex w-24 h-24 rounded-full">
-                    <img src="{{ asset('storage/' . $user->images) }}" alt="profile image" class="rounded-full">
+                <div class="flex w-24 h-24 rounded-full object-cover">
+                    <img src="{{ asset('storage/' . $user->images) }}" alt="profile image" class="rounded-full object-cover block w-24 h-24">
                 </div>
                 <div id="preview-profile" class="flex items-center rounded-full"></div>
             </div>
