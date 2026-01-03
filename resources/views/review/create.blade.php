@@ -38,7 +38,7 @@
             </div>
             <button
                 type="submit"
-                class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded"
+                class="bg-rose-500 hover:bg-rose-600 text-white px-6 py-2 rounded-lg"
             >
                 Submit review
             </button>

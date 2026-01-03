@@ -6,13 +6,17 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -24,7 +28,19 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('name')
+                ->label('Name')
+                ->required()
+                ->maxLength(255),
+                TextInput::make('email')
+                ->label('Email')
+                ->required()
+                ->maxLength(255),
+                FileUpload::make('images')
+                ->label('Profile Image')
+                ->image()
+                ->directory('profile')
+                ->nullable()
             ]);
     }
 
@@ -34,8 +50,11 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name')
                 ->searchable(),
+                ImageColumn::make('images')
+                ->label('Image'),
                 TextColumn::make('email')
                 ->searchable(),
+                TextColumn::make('password'),
                 TextColumn::make('created_at')
                 ->searchable(),
                 TextColumn::make('updated_at')
@@ -59,6 +78,11 @@ class UserResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 
     public static function getPages(): array

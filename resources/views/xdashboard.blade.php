@@ -2,7 +2,7 @@
 @section('content')
     <div>
         <h2 class="text-2xl font-bold mb-6">Popular homes</h2>
-        <div class="flex flex-wrap gap-4">
+        <div class="grid grid-cols-5 gap-4">
             @if ($listings->isNotEmpty())
                 @auth
                     @foreach($listings as $listing)
