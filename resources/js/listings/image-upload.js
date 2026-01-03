@@ -1,6 +1,6 @@
 export function imageUpload() {
     const input = document.getElementById('images');
-    const preview = document.getElementById('preview');
+    const preview = document.getElementById('preview-images');
 
     if (!input || !preview) return;
 

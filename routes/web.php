@@ -56,6 +56,9 @@ Route::post('/reservation/{id}/review', [ReviewController::class, 'store'])->nam
 
 Route::get('/search', [PenginapanController::class, 'search'])->name('listings.search');
 
+Route::patch('/profile/{id}/profile-edit', [ProfileController::class, 'editProfile'])->name('photo-profile-edit')->middleware('auth');
+
+
 // testing doang ngab
 Route::get('/testing', function() {
     return view('testing');

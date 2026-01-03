@@ -213,7 +213,67 @@
                 @enderror
             </div>
 
-            {{-- Images --}}
+            {{-- Images Cover--}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-2">
+                    Foto Cover
+                </label>
+
+                <input
+                    id="image_cover"
+                    type="file"
+                    name="image_cover"
+                    accept="image/*"
+                    class="block w-full text-lg text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-xl file:border-0
+                        file:text-lg file:font-medium
+                        file:bg-rose-50 file:text-rose-600
+                        hover:file:bg-rose-100"
+                >
+
+                <p class="text-lg text-gray-400 mt-1">
+                    Upload foto cover.
+                </p>
+                @error('image_cover')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+
+                {{-- preview --}}
+                <div id="preview-cover" class="grid grid-cols-3 gap-4 mt-4"></div>
+            </div>
+
+            {{-- Images Kamar--}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-2">
+                    Foto Kamar
+                </label>
+
+                <input
+                    id="image_kamar"
+                    type="file"
+                    name="image_kamar"
+                    accept="image/*"
+                    class="block w-full text-lg text-gray-500
+                        file:mr-4 file:py-2 file:px-4
+                        file:rounded-xl file:border-0
+                        file:text-lg file:font-medium
+                        file:bg-rose-50 file:text-rose-600
+                        hover:file:bg-rose-100"
+                >
+
+                <p class="text-lg text-gray-400 mt-1">
+                    Upload foto kamar.
+                </p>
+                @error('image_kamar')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+
+                {{-- preview --}}
+                <div id="preview-kamar" class="grid grid-cols-3 gap-4 mt-4"></div>
+            </div>
+
+            {{-- Images All--}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-2">
                     Foto Penginapan
@@ -234,14 +294,14 @@
                 >
 
                 <p class="text-lg text-gray-400 mt-1">
-                    Upload beberapa foto. Foto pertama otomatis jadi cover.
+                    Upload beberapa foto.
                 </p>
                 @error('images')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
 
                 {{-- preview --}}
-                <div id="preview" class="grid grid-cols-3 gap-4 mt-4"></div>
+                <div id="preview-images" class="grid grid-cols-3 gap-4 mt-4"></div>
             </div>
 
 
