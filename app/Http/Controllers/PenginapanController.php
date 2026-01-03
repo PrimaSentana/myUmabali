@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Storage;
 class PenginapanController extends Controller
 {
     public function test() { //ngetest azahhh
-        [$checkIn, $checkOut] = explode(' to ', request('date_range'));
-        dd([$checkIn, $checkOut]);
+        dd(request()->hasFile('image_kamar'), request()->hasFile('image_cover'), request()->hasFile('images'));
     }
+    
     public function index(Listings $listings) {
         $listings = Listings::all();
         $user = User::find(Auth::id());
@@ -45,6 +45,8 @@ class PenginapanController extends Controller
             'category' => ['required'],
             'facilities' => ['array', 'required', 'min:1'],
             'images' => ['array'],
+            'image_kamar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_cover' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => ['required'],
         ]);
 
@@ -68,20 +70,34 @@ class PenginapanController extends Controller
             $listings->facilities()->sync(request()->facilities);
         }
 
+        if(request()->hasFile('image_kamar')) {
+            $path = request()->file('image_kamar')->store('listings', 'public');
+            ListingImage::create([
+                'listings_id' => $listings['id'],
+                'image_path' => $path,
+                'isKamar' => true
+            ]);
+        }
+
+        if(request()->hasFile('image_cover')) {
+            $path = request()->file('image_cover')->store('listings', 'public');
+            ListingImage::create([
+                'listings_id' => $listings['id'],
+                'image_path' => $path,
+                'isCover' => true
+            ]);
+        }
+
         // handle image
         if(request()->hasFile('images')) {
             foreach(request()->file('images') as $index => $image) {
                 $path = $image->store('listings', 'public');
-
                 ListingImage::create([
                     'listings_id' => $listings['id'],
                     'image_path' => $path,
-                    'isCover' => $index === 0, // image pertama
-                    'isKamar' => $index === 1  // image kedua
                 ]);
             }
         }
-
 
         return redirect()->route('xdashboard')
         ->with('success', 'Penginapan berhasil ditambahkan');
