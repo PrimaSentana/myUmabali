@@ -61,6 +61,10 @@ class ProfileController extends Controller
     }
 
     public function editProfile($id) {
+        request()->validate([
+            'image_profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+        
         $user = User::find($id);
         if(request()->hasFile('image_profile')) {
             $path = request()->file('image_profile')->store('profile', 'public');
