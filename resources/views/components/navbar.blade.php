@@ -6,11 +6,11 @@
         <div class="flex items-center space-x-2">
             <img src="{{ asset('images/UmaBali_Logo.png') }}" alt="Logo" width="60" class="rounded-full">
             <span class="font-bold text-2xl text-gray-900">UmaBali</span>
-            @auth
+            {{-- @auth
               <div class="px-4">
                 <span class="font-bold text-xl text-gray-900">Hi, {{Auth::user()->name}}!</span>
               </div>
-            @endauth
+            @endauth --}}
         </div>
       </a>
     

@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+            {{ __('Profile Image') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Update your account's profile image.") }}
         </p>
     </header>
 
@@ -18,15 +18,18 @@
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')"/>
+            <div class="w-24 h-24 rounded-full">
+                <img src="{{ asset('storage/' . $user->images) }}" alt="profile image" class="rounded-full">
+            </div>
+            <div class="mt-4">
+                <input type="file">
+            </div>
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
+            {{-- <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <x-input-error class="mt-2" :messages="$errors->get('email')" /> --}}
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>

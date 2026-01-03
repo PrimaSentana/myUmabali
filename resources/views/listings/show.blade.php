@@ -57,10 +57,12 @@
             </p>
 
             <div class="flex items-center gap-4 border-b pb-4">
-                <div class="w-12 h-12 bg-gray-300 rounded-full"></div>
+                <div class="w-12 h-12 rounded-full">
+                    <img src="{{ asset('storage/' . $listings->user->images) }}" alt="profile" class="rounded-full">
+                </div>
                 <div>
                     <p class="font-medium">Tuan Rumah: {{ $listings->user->name }}</p>
-                    <p class="text-sm text-gray-500">Host Teladan: Tuan rumah selama 3 tahun</p>
+                    <p class="text-sm text-gray-500">Host Teladan: Tuan rumah selama {{ $listings->user->listings->first()->created_at->locale('id')->diffForHumans() }}</p>
                 </div>
             </div>
 
@@ -108,33 +110,61 @@
             </div>
         </div>
 
-        <!-- kanan (card harga)
-            TODO: ubah jadi form (kalo perlu)
-        -->
-        
-        <div class="md:w-1/3">
-            <form action="/reservation/{{ $listings->id }}" method="POST">
-                @csrf
-                <div class="border rounded-xl shadow-md p-5 sticky top-24">
-                    <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
-                    <div class="mt-4 border rounded-lg divide-y">
-                        <div class="p-2">
-                            <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
-                            <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
-                        </div>
-                        <div class="p-2">
-                            <label id="guest_count" class="block text-gray-600">Tamu</label>
-                            <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
-                            <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
-                        </div>
-                    </div>
+        @auth
+            @if ($listings->user->id === $user->id)
+                
+            @else
+                <div class="md:w-1/3">
+                    <form action="/reservation/{{ $listings->id }}" method="POST">
+                        @csrf
+                        <div class="border rounded-xl shadow-md p-5 sticky top-24">
+                            <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
+                            <div class="mt-4 border rounded-lg divide-y">
+                                <div class="p-2">
+                                    <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
+                                    <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
+                                </div>
+                                <div class="p-2">
+                                    <label id="guest_count" class="block text-gray-600">Tamu</label>
+                                    <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
+                                    <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
+                                </div>
+                            </div>
 
-                    <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
-                        Pesan
-                    </button>
+                            <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
+                                Pesan
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
+            @endif
+        @endauth
+        @guest
+            <div class="md:w-1/3">
+                <form action="/reservation/{{ $listings->id }}" method="POST">
+                    @csrf
+                    <div class="border rounded-xl shadow-md p-5 sticky top-24">
+                        <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
+                        <div class="mt-4 border rounded-lg divide-y">
+                            <div class="p-2">
+                                <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
+                                <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
+                            </div>
+                            <div class="p-2">
+                                <label id="guest_count" class="block text-gray-600">Tamu</label>
+                                <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
+                                <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
+                            </div>
+                        </div>
+                        <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
+                            Pesan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        @endguest
+
+        
     </div>
 </div>
 @endsection

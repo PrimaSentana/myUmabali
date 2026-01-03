@@ -1,11 +1,11 @@
-@extends('layouts.home')
+@extends('layouts.penginapan')
 @section('content')
     <div>
         <div class="ml-2">
             <h1 class="text-4xl font-medium ">Penginapan</h1>
             <p>Daftar penginapan anda!</p>
         </div>
-        <div class="flex flex-wrap gap-8 mt-4">
+        <div class="grid grid-cols-5 gap-4 mt-4">
             @foreach($listings as $listing)
                 <x-home-card 
                     :id="$listing->id"
