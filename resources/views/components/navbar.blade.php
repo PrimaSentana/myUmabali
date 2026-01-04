@@ -1,6 +1,6 @@
-<header class="bg-gray-50 shadow-md w-full flex items-center">
+<header class="bg-gray-50 shadow-md w-full relative z-40">
   <!-- Baris atas -->
-  <div class="w-full flex items-center justify-between pt-3 px-8">
+  <div class="w-full flex items-center justify-between pt-3 px-4 md:px-8 py-3 transition-all duration-300">
     <!-- Kiri: Logo -->
       <a href="/">
         <div class="flex items-center space-x-2">
