@@ -21,6 +21,10 @@ class Listings extends Model
         return $this->hasOne(ListingImage::class)->where('isKamar', true);
     }
 
+    public function imageGeneral() {
+        return $this->hasOne(ListingImage::class)->where('isKamar', true);
+    }
+
     public function facilities() {
         return $this->belongsToMany(Facility::class);
     }

@@ -12,4 +12,8 @@ class Facility extends Model
     public function listings() {
         return $this->belongsToMany(Listings::class);
     }
+
+    public function penginapans() {
+        return $this->belongsToMany(Penginapan::class, 'facility_listings', 'facility_id', 'listings_id');
+    }
 }
