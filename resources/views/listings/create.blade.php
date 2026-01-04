@@ -7,7 +7,7 @@
             Upload Penginapan
         </h1>
         <p class="text-gray-500 mb-8">
-            Lengkapi detail penginapan kamu seperti di Airbnb
+            Lengkapi detail penginapan kamu
         </p>
 
         <form method="POST" action="/penginapan" enctype="multipart/form-data" class="space-y-6">
@@ -47,7 +47,7 @@
             </div>
 
             {{-- Room info --}}
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                     <label class="block text-lg font-medium text-gray-700 mb-1">
                         Kamar Tidur

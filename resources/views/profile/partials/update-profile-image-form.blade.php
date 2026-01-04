@@ -26,10 +26,10 @@
                     type="file"
                     name="image_profile"
                     accept="image/*"
-                    class="block w-full text-lg text-gray-500
+                    class="block w-full text-sm md:text-lg text-gray-500
                         file:mr-4 file:py-2 file:px-4
                         file:rounded-xl file:border-0
-                        file:text-lg file:font-medium
+                        file:text-sm md:file:text-lg file:font-medium
                         file:bg-rose-50 file:text-rose-600
                         hover:file:bg-rose-100"
                 >

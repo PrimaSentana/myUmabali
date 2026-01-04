@@ -2,7 +2,7 @@
 @section('content')
     <div>
         <h2 class="text-2xl font-bold mb-6">Popular homes</h2>
-        <div class="grid grid-cols-5 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
             @if ($listings->isNotEmpty())
                 @auth
                     @foreach($listings as $listing)
@@ -12,6 +12,7 @@
                             :title="$listing->title" 
                             :price="$listing->price"
                             :isRelated="$user->favorites()->where('listings_id', $listing->id)->exists()"
+                            :rating="$listing->reviews()"
                         />
                     @endforeach
                 @endauth
@@ -23,6 +24,7 @@
                             :title="$listing->title" 
                             :price="$listing->price"
                             :isRelated="false"
+                            :rating="$listing->reviews()"
                         />
                     @endforeach
                 @endguest
