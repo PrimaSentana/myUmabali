@@ -4,10 +4,18 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PenginapanResource\Pages;
 use App\Filament\Resources\PenginapanResource\RelationManagers;
+use App\Models\Category;
 use App\Models\Penginapan;
 use Dotswan\MapPicker\Fields\Map;
 use Filament\Forms;
+use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Radio;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -57,6 +65,7 @@ class PenginapanResource extends Resource
                 Map::make('lokasi_map')
                 ->label('Lokasi Penginapan')
                 ->columnSpanFull() 
+                ->dehydrated(false)
                 ->defaultLocation(latitude: -8.409518, longitude: 115.188919) 
                 ->afterStateUpdated(function (Set $set, ?array $state) {
                     $set('latitude', $state['lat']);
@@ -88,7 +97,74 @@ class PenginapanResource extends Resource
                     ->readOnly(),
                 ])
                 ->columns(2)
-                ->columnSpanFull()
+                ->columnSpanFull(),
+
+                Radio::make('category_id')
+                ->label('Kategori Listings')
+                ->options(
+                    Category::all()->pluck('title', 'id')
+                )
+                ->columns(3)
+                ->gridDirection('column')
+                ->required(),
+
+                CheckboxList::make('facilities')
+                ->label('Fasilitas Listings')
+                ->relationship(
+                    name: 'facilities',
+                    titleAttribute: 'title'
+                )
+                ->columns(2)
+                ->gridDirection('column')
+                ->searchable()
+                ->bulkToggleable(),
+
+                Section::make('Cover Image')
+                ->description('Gambar yang akan tampil sebagai cover penginapan anda')
+                ->schema([
+                    Group::make()
+                    ->relationship('coverImage')
+                    ->schema([
+                        FileUpload::make('image_path')
+                        ->label('Cover')
+                        ->image()
+                        ->directory('listings')
+                        ->required(),
+                        Hidden::make('isCover')->default(true),
+                        Hidden::make('isKamar')->default(false)
+                    ])
+                ]),
+                Section::make('Room Image')
+                ->description('Tunjukkan kamar penginapan anda')
+                ->schema([
+                    Group::make()
+                    ->relationship('kamarImage')
+                    ->schema([
+                        FileUpload::make('image_path')
+                        ->label('Room')
+                        ->image()
+                        ->directory('listings')
+                        ->required(),
+                        Hidden::make('isCover')->default(false),
+                        Hidden::make('isKamar')->default(true)
+                    ])
+                ]),
+                Section::make('General Image')
+                ->description('Gambar Halaman atau Fasilitas')
+                ->schema([
+                    Repeater::make('imageGeneral')
+                    ->relationship()
+                    ->schema([
+                        FileUpload::make('image_path')
+                        ->image()
+                        ->directory('listings')
+                        ->required(),
+                        Hidden::make('isCover')->default(false),
+                        Hidden::make('isKamar')->default(false),
+                    ])
+                    ->label('Foto Lainnya')
+                    ->grid(3)
+                ])
             ]);
     }
 

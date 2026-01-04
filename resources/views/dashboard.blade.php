@@ -5,11 +5,11 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-12 px-4">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                 <x-summary-card title="Total Balance">
-                    Rp{{ number_format($user->balance->balance, 2, ',', '.') }}
+                    Rp{{ number_format($user->balance->balance ?? 0, 2, ',', '.') }}
                 </x-summary-card>
 
                 <x-summary-card title="Total Listings">
@@ -20,37 +20,37 @@
                     {{ $totalBookings }}
                 </x-summary-card>
 
-                <x-summary-card title="Paid Bookings">
+                <x-summary-card title="Completed Bookings">
                     {{ $completedBookings }}
                 </x-summary-card>
             </div>
 
-            <div class="bg-white rounded-xl shadow p-6 mb-8">
+            <div class="bg-white rounded-xl shadow p-6 mb-8 w-full overflow-x-auto">
                 <h2 class="text-lg font-semibold mb-4">Incoming Bookings</h2>
 
-                <table class="w-full text-sm">
+                <table class="min-w-[600px] md:w-full text-sm">
                     <thead class="text-gray-500 border-b">
                         <tr>
-                            <th class="py-2 text-left">Listing</th>
-                            <th class="text-left">Guest</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Total 10{{ '%' }} fee</th>
+                            <th class="py-2 text-left whitespace-nowrap">Listing</th>
+                            <th class="text-left whitespace-nowrap">Guest</th>
+                            <th class="whitespace-nowrap">Date</th>
+                            <th class="whitespace-nowrap">Status</th>
+                            <th class="whitespace-nowrap">Total 10{{ '%' }} fee</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($incomingBookings as $booking)
                             <tr class="border-b">
-                                <td class="py-2">{{ $booking->listings->title }}</td>
-                                <td>{{ $booking->user->name }}</td>
-                                <td class="text-center">{{ $booking->check_in->format('j M') }} → {{ $booking->check_out->format('j M Y') }}</td>
-                                <td class="text-center">
+                                <td class="py-2 whitespace-nowrap">{{ $booking->listings->title }}</td>
+                                <td class="whitespace-nowrap">{{ $booking->user->name }}</td>
+                                <td class="text-center whitespace-nowrap">{{ $booking->check_in->format('j M') }} → {{ $booking->check_out->format('j M Y') }}</td>
+                                <td class="text-center whitespace-nowrap">
                                     <span class="px-2 py-1 rounded text-xs
-                                        {{ $booking->payment_status === 'paid' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600' }}">
+                                        {{ $booking->payment_status === 'paid' ? 'bg-green-100 text-green-600' : ($booking->payment_status === 'completed' ? 'bg-blue-100 text-blue-600' : 'bg-yellow-100 text-yellow-600')  }}">
                                         {{ ucfirst($booking->payment_status) }}
                                     </span>
                                 </td>
-                                <td class="text-center">Rp{{ number_format($booking->total_price - ($booking->total_price * 10 / 100)) }}</td>
+                                <td class="text-center whitespace-nowrap">Rp{{ number_format($booking->total_price - ($booking->total_price * 10 / 100)) }}</td>
                             </tr>
                         @empty
                             <tr>

@@ -10,7 +10,6 @@
         </div>
         <form method="POST" action="{{ route('review.store', $reservation->id) }}">
             @csrf
-            {{-- Rating --}}
             <div class="mb-4">
                 <label class="block mb-2 font-medium">Rating</label>
                 <div id="rating" class="flex gap-1">
@@ -28,7 +27,6 @@
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
-            {{-- Comment --}}
             <div class="mb-6">
                 <label class="block mb-2 font-medium">Comment (optional)</label>
                 <textarea name="comment"
@@ -44,7 +42,6 @@
             </button>
         </form>
     </div>
-    {{-- Rating Script --}}
     <script>
         const stars = document.querySelectorAll('.star');
         const input = document.getElementById('rating-input');

@@ -1,6 +1,6 @@
-<header class="bg-gray-50 shadow-md w-full">
+<header class="bg-gray-50 shadow-md w-full flex items-center">
   <!-- Baris atas -->
-  <div class="w-full flex items-center justify-between px-8 py-3">
+  <div class="w-full flex items-center justify-between pt-3 px-8">
     <!-- Kiri: Logo -->
       <a href="/">
         <div class="flex items-center space-x-2">
@@ -16,10 +16,10 @@
     
 
     <!-- Tengah: Menu -->
-    <nav class="flex items-center space-x-2 ">
+    <nav class="flex items-center justify-center space-x-2 ml-12">
       <form action="/search" method="GET">
         @csrf
-        <div class="w-full flex justify-center py-4">
+        <div class="w-full flex items-center justify-center py-4">
           <div class="bg-white shadow-xl rounded-full flex items-center divide-x divide-gray-300 overflow-hidden">
             <!-- Lokasi -->
             <div class="px-4 py-2 cursor-pointer">
@@ -71,11 +71,18 @@
       <!-- Ikon User (Dropdown) -->
       <div x-data="{ openUser: false }" class="relative">
         <button @click="openUser = !openUser" class="flex items-center justify-center h-8 w-8 rounded-full bg-black text-white cursor-pointer hover:bg-gray-800">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-               stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 19.5a8.25 8.25 0 0 1 15 0v.75H4.5v-.75Z"/>
-          </svg>
+          @auth
+            <div class="rounded-full object-cover w-8 h-8">
+              <img src="{{ asset('storage/' . Auth::user()->images) }}" alt="" class="rounded-full object-cover block w-8 h-8">
+            </div>
+          @endauth
+          @guest
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 19.5a8.25 8.25 0 0 1 15 0v.75H4.5v-.75Z"/>
+            </svg>
+          @endguest
         </button>
 
         <!-- Dropdown User -->
@@ -155,34 +162,4 @@
       </div>
     </div>
   </div>
-
-
-  <!-- Baris bawah: Search bar -->
-  {{-- <div class="w-full flex justify-center pb-8">
-    <div class="bg-white shadow-xl rounded-full flex items-center divide-x divide-gray-300 overflow-hidden">
-      <!-- Lokasi -->
-      <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-        <p class="text-xs font-semibold text-gray-800">Lokasi</p>
-        <p class="text-sm text-gray-500">Cari Destinasi</p>
-      </div>
-      <!-- Tanggal -->
-      <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-        <p class="text-xs font-semibold text-gray-800">Tanggal</p>
-        <p class="text-sm text-gray-500">Tambahkan Tanggal</p>
-      </div>
-      <!-- Tamu -->
-      <div class="px-6 py-3 hover:bg-gray-100 cursor-pointer">
-        <p class="text-xs font-semibold text-gray-800">Tamu</p>
-        <p class="text-sm text-gray-500">Tambahkan Tamu</p>
-      </div>
-      <!-- Tombol Cari -->
-      <button class="bg-black text-white rounded-full p-3 m-2 flex items-center justify-center hover:bg-gray-800">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke-width="2" stroke="currentColor" class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round"
-                d="m21 21-4.35-4.35m0 0a7.5 7.5 0 1 0-10.6-10.6 7.5 7.5 0 0 0 10.6 10.6z"/>
-        </svg>
-      </button>
-    </div>
-  </div> --}}
 </header>

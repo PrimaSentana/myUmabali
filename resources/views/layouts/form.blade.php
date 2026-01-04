@@ -16,17 +16,21 @@
         
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+        />
         <!-- Styles / Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-[#FDFDFC] text-[#1b1b18] min-h-screen">
-        @include('components.header')
+        @include('components.navbar')
 
         <main class="container mx-auto px-4 py-8">
             @yield('content')
         </main>
 
         @include('components.footer')
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     </body>
 </html>

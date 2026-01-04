@@ -5,9 +5,6 @@
         <h2 class="text-xl font-semibold mb-2">{{ $title }}</h2>
         <p class="text-gray-600 mb-6">{{ $message }}</p>
         <div class="flex gap-3 justify-end items-center">
-            <button type="button" onclick="closeModal({{ $id }})" class="px-5 text-slate-800 py-2 border rounded-lg hover:bg-slate-200">
-                Batal
-            </button>
             <form action="{{ $action }}" method="POST" class="mt-4 px-5 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600">
                 @csrf
                 @method('DELETE')
