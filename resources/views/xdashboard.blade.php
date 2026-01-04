@@ -1,8 +1,8 @@
 @extends('layouts.penginapan')
 @section('content')
-    <div>
+    <div class="">
         <h2 class="text-2xl font-bold mb-6">Popular homes</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="grid grid-flow-col overflow-x-auto auto-cols-[45%] snap-x snap-mandatory md:grid-flow-row md:grid-cols-3 lg:grid-cols-5 gap-4">
             @if ($listings->isNotEmpty())
                 @auth
                     @foreach($listings as $listing)

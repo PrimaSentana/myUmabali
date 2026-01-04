@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        @filamentStyles
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -32,7 +33,7 @@
         @endif
     </head>
     <body class="bg-[#FDFDFC] text-[#1b1b18] min-h-screen">
-        @include('components.navbar')
+        @include('components.xnavbar')
 
         <main class="container mx-auto px-4 py-8">
             @yield('content')
@@ -46,5 +47,8 @@
         <script src="https://app.sandbox.midtrans.com/snap/snap.js"
             data-client-key="{{ config('services.midtrans.client_key') }}">
         </script>
+
+        @livewire('notifications')
+        @filamentScripts
     </body>
 </html>
