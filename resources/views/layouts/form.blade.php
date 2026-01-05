@@ -24,7 +24,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-[#FDFDFC] text-[#1b1b18] min-h-screen">
-        @include('components.navbar')
+        @include('components.xnavbar')
 
         <main class="container mx-auto px-4 py-8">
             @yield('content')
