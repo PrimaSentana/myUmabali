@@ -36,6 +36,11 @@ class UserResource extends Resource
                 ->label('Email')
                 ->required()
                 ->maxLength(255),
+                TextInput::make('password')
+                ->password() 
+                ->revealable() 
+                ->dehydrated(fn ($state) => filled($state)) 
+                ->required(fn (string $context): bool => $context === 'update'),
                 FileUpload::make('images')
                 ->label('Profile Image')
                 ->image()
