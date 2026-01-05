@@ -9,9 +9,9 @@
 @section('content')
     <div class="container mx-auto px-4 py-8 text-[#1b1b18]">
 
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col justify-items md:flex-row md:items-center md:justify-between">
         <h1 class="text-xl font-medium mb-4">{{ $listings->title }}, Kamar untuk {{ $listings->guest_count }} orang</h1>
-        <div class="flex gap-8 mr-8">
+        <div class="flex justify-end gap-8 mr-8">
             @can('update', $listings)
                 <a href="{{ route('listings.edit', $listings) }}" class="text-slate-700 font-medium hover:underline">Edit</a>
             @endcan
@@ -111,12 +111,14 @@
         <div class="md:w-2/3 space-y-6">
 
             <p class="text-gray-600">
-                Seluruh serviced {{ $listings->title }}, {{ $listings->location_value }}<br>
+                <span class="text-black text-xl font-medium">
+                    Seluruh serviced {{ $listings->title }}, {{ $listings->location_value }}<br>
+                </span>
                 {{ $listings->guest_count }} tamu • {{ $listings->room_count }} kamar tidur • {{ $listings->bathroom_count }} kamar mandi
             </p>
 
             <div class="flex items-center gap-4 border-b pb-4">
-                <div class="object-cover rounded-full">
+                <div class="object-cover rounded-full w-12 h-12">
                     <img src="{{ asset('storage/' . $listings->user->images) }}" alt="profile" class="object-cover rounded-full w-12 h-12">
                 </div>
                 <div>
@@ -168,15 +170,147 @@
                 </div>
             </div>
 
-            <div>
-                <h2 class="text-lg font-semibold mb-2">Review</h2>
-            </div>
-        </div>
+            <div class="md:hidden block">
+                @auth
+                    @if ($listings->user->id === $user->id)
+                        
+                    @else
+                        <div class="md:w-1/3">
+                            <form action="/reservation/{{ $listings->id }}" method="POST">
+                                @csrf
+                                <div class="border rounded-xl shadow-md p-5 sticky top-24">
+                                    <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
+                                    <div class="mt-4 border rounded-lg divide-y">
+                                        <div class="p-2">
+                                            <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
+                                            <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
+                                        </div>
+                                        <div class="p-2">
+                                            <label id="guest_count" class="block text-gray-600">Tamu</label>
+                                            <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
+                                            <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
+                                        </div>
+                                    </div>
 
-        @auth
-            @if ($listings->user->id === $user->id)
-                
-            @else
+                                    <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
+                                        Pesan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    @endif
+                @endauth
+                @guest
+                    <div class="md:w-1/3">
+                        <form action="/reservation/{{ $listings->id }}" method="POST">
+                            @csrf
+                            <div class="border rounded-xl shadow-md p-5 sticky top-24">
+                                <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
+                                <div class="mt-4 border rounded-lg divide-y">
+                                    <div class="p-2">
+                                        <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
+                                        <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
+                                    </div>
+                                    <div class="p-2">
+                                        <label id="guest_count" class="block text-gray-600">Tamu</label>
+                                        <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
+                                        <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
+                                    </div>
+                                </div>
+                                <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
+                                    Pesan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @endguest
+            </div>
+
+            <section class="py-8 border-t border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
+
+                    @foreach($reviews as $review)
+                        <div class="flex flex-col">
+                            <div class="flex items-center gap-4 mb-3">
+                                <img src="{{ asset('storage/' . $review->user->images)}}"
+                                    alt="{{ $review->user->name }}" 
+                                    class="w-12 h-12 rounded-full object-cover bg-gray-200">
+                                <div>
+                                    <h3 class="font-medium text-gray-900 text-base">
+                                        {{ $review->user->name }}
+                                    </h3>
+                                    <p class="text-sm text-gray-800">
+                                        {{ $review->user->created_at->locale('id')->diffForHumans(null, true)}} bergabung di Umabali
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 mb-3 text-sm">
+                                <div class="flex gap-0.5 text-gray-900">
+                                    @for($i = 0; $i < $review->rating; $i++)
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3">
+                                                <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                                            </svg>
+                                    @endfor
+                                </div>
+                                
+                                <span class="text-gray-900 mx-1">·</span>
+                                
+                                <span class="text-gray-500 font-medium">
+                                    {{ \Carbon\Carbon::parse($review->created_at)->translatedFormat('j M Y') }}
+                                </span>
+                            </div>
+
+                            <div class="text-gray-700 leading-relaxed text-base line-clamp-3">
+                                {{ $review->comment }}
+                            </div>
+
+                            @if(strlen($review->comment) > 150)
+                                <button class="mt-2 text-gray-900 underline font-medium text-sm text-left decoration-1 underline-offset-2 hover:text-gray-600 w-fit">
+                                    Tampilkan lebih banyak
+                                </button>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="mt-10">
+                    <button class="px-6 py-3 border border-gray-900 rounded-lg font-semibold text-gray-900 hover:bg-gray-50 transition text-base">
+                        Tampilkan semua {{ $reviews->count() }} ulasan
+                    </button>
+                </div>
+            </section>
+        </div>
+            @auth
+                @if ($listings->user->id === $user->id)
+                    
+                @else
+                    <div class="hidden md:block md:w-1/3">
+                        <form action="/reservation/{{ $listings->id }}" method="POST">
+                            @csrf
+                            <div class="border rounded-xl shadow-md p-5 sticky top-24">
+                                <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
+                                <div class="mt-4 border rounded-lg divide-y">
+                                    <div class="p-2">
+                                        <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
+                                        <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
+                                    </div>
+                                    <div class="p-2">
+                                        <label id="guest_count" class="block text-gray-600">Tamu</label>
+                                        <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
+                                        <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
+                                    Pesan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                @endif
+            @endauth
+            @guest
                 <div class="md:w-1/3">
                     <form action="/reservation/{{ $listings->id }}" method="POST">
                         @csrf
@@ -193,41 +327,13 @@
                                     <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
                                 </div>
                             </div>
-
                             <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
                                 Pesan
                             </button>
                         </div>
                     </form>
                 </div>
-            @endif
-        @endauth
-        @guest
-            <div class="md:w-1/3">
-                <form action="/reservation/{{ $listings->id }}" method="POST">
-                    @csrf
-                    <div class="border rounded-xl shadow-md p-5 sticky top-24">
-                        <p class="text-xl font-semibold">Rp{{ number_format($listings->price, 2, ',', '.')}} <span class="text-sm font-normal text-gray-500">untuk 1 malam</span></p>
-                        <div class="mt-4 border rounded-lg divide-y">
-                            <div class="p-2">
-                                <label id="check-in" class="block text-gray-600">Pilih Tanggal Menginap</label>
-                                <input required type="text" id="date_range" name="date_range" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Pilih tanggal">
-                            </div>
-                            <div class="p-2">
-                                <label id="guest_count" class="block text-gray-600">Tamu</label>
-                                <input required type="number" min="1" max="{{ $listings->guest_count }}" name="guest_count" class="w-full border mt-2 rounded-lg px-3 py-2" placeholder="Jumlah tamu">
-                                <p class="text-sm mt-2 text-gray-500">Maksimal {{ $listings->guest_count }} tamu</p>
-                            </div>
-                        </div>
-                        <button type="submit" class="mt-4 w-full bg-[#E91E63] text-white py-3 rounded-lg font-medium hover:bg-[#d81b60] transition">
-                            Pesan
-                        </button>
-                    </div>
-                </form>
-            </div>
-        @endguest
-
-        
+            @endguest
     </div>
 </div>
 @endsection

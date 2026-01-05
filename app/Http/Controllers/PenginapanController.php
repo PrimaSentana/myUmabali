@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Wishlist;
+use Filament\Notifications\Notification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Storage;
 
@@ -112,7 +113,9 @@ class PenginapanController extends Controller
         ->get();
         $facilities = $listings->facilities()->get();
 
-        return view('listings.show', ['listings' => $listings, 'images' => $images, 'facilities' => $facilities, 'user' => $user]);
+        $reviews = $listings->reviews;
+
+        return view('listings.show', ['listings' => $listings, 'images' => $images, 'facilities' => $facilities, 'user' => $user, 'reviews' => $reviews]);
     }
 
     public function edit(Listings $listings) {
@@ -208,6 +211,11 @@ class PenginapanController extends Controller
             $user->favorites()->attach(request()->listings_id);
         }
 
+        Notification::make()
+        ->title('Berhasil favorite')
+        ->color('#27FB6B')
+        ->send();
+
         return redirect()->back();
     }
 
@@ -217,6 +225,11 @@ class PenginapanController extends Controller
         if(request()->filled('listings_id')) {
             $user->favorites()->detach(request()->listings_id);
         }
+
+        Notification::make()
+        ->title('Berhasil cancel')
+        ->color('#FD151B')
+        ->send();
 
         return redirect()->back();
     }
@@ -233,7 +246,7 @@ class PenginapanController extends Controller
 
         $listings = Listings::query()
         ->when($location, function($q) use ($location) {
-            $q->where('location_value', 'like', '%' . $location . '%');
+            $q->where('title', 'like', '%' . $location . '%');
         })
         ->when($guest, function($q) use ($guest) {
             $q->where('guest_count', ">=", $guest);
