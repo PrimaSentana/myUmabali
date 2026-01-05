@@ -4,14 +4,6 @@
     <a href="/" class="flex-none">
       <div class="flex items-center space-x-2">
           <img src="{{ asset('images/umabali-v2.png') }}" alt="Logo" width="150" class="rounded-full md:w-[210px]">
-
-          {{-- Ga dipake --}}
-          {{-- <span class="font-bold text-xl md:text-2xl text-gray-900 hidden sm:block">UmaBali</span> --}}
-{{--      @auth
-            <div class="px-2 md:px-4 hidden lg:block">
-              <span class="font-bold text-sm md:text-xl text-gray-900">Hi, {{Auth::user()->name}}!</span>
-            </div>
-          @endauth --}}
       </div>
     </a>
 
@@ -35,9 +27,17 @@
       <div x-data="{ openUser: false }" class="relative">
         <button @click="openUser = !openUser" class="flex items-center justify-center h-8 w-8 rounded-full bg-black text-white cursor-pointer hover:bg-gray-800">
           @auth
+            @if (Auth::user()->images)
               <div class="rounded-full object-cover w-8 h-8">
                 <img src="{{ asset('storage/' . Auth::user()->images) }}" alt="" class="rounded-full object-cover block w-8 h-8">
               </div>
+            @else
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15.75 7.5a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 19.5a8.25 8.25 0 0 1 15 0v.75H4.5v-.75Z"/>
+                </svg>
+            @endif
           @endauth
           @guest
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -73,7 +73,6 @@
         </div>
       </div>
   
-      {{-- hamburger --}}
       <div x-data="{ openMenu: false }" class="relative">
         <button @click="openMenu = !openMenu" class="flex items-center justify-center h-8 w-8 rounded-full border border-black text-black cursor-pointer hover:bg-gray-200 transition-colors duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -96,7 +95,7 @@
       </div>
     </div>
   
-    {{-- navbar --}}
+    {{-- serach bar --}}
     <nav class="w-full order-3 md:order-2 mt-4 md:mt-0 flex justify-center">
       <form action="/search" method="GET" class="w-full md:w-auto">
         @csrf
