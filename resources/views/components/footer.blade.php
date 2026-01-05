@@ -8,14 +8,14 @@
             <div>
                 <h3 class="text-sm text-gray-500 uppercase mb-2 tracking-wide">Contact Us</h3>
                 <h2 class="text-2xl font-semibold leading-snug mb-4">
-                    Let's Discuss Your Vision.<br>With Us
+                    Siap Menyambut Tamu Pertama Anda?<br>Umabali
                 </h2>
-                <button class="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2 rounded-full text-sm hover:bg-gray-800 transition">
-                    Schedule a call now
+                <a href="{{ route('listings.create') }}" class="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2 rounded-full text-sm hover:bg-gray-800 transition">
+                    Daftarkan sekarang
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12l-3.75 3.75M21 12H3" />
                     </svg>
-                </button>
+                </a>
 
                 <p class="text-xs uppercase text-gray-500 mt-6 mb-2">Or reach us at</p>
                 <div class="flex items-center bg-gray-100 rounded-full px-4 py-2 w-fit gap-2">
@@ -27,7 +27,6 @@
                     </button>
                 </div>
             </div>
-
         </div>
 
         <div class="mt-12">

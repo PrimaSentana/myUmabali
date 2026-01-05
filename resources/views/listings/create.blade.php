@@ -232,7 +232,7 @@
                         hover:file:bg-rose-100"
                 >
 
-                <p class="text-lg text-gray-400 mt-1">
+                <p class="text-md text-gray-400 mt-1">
                     Upload foto cover.
                 </p>
                 @error('image_cover')
@@ -262,7 +262,7 @@
                         hover:file:bg-rose-100"
                 >
 
-                <p class="text-lg text-gray-400 mt-1">
+                <p class="text-md text-gray-400 mt-1">
                     Upload foto kamar.
                 </p>
                 @error('image_kamar')
@@ -293,7 +293,7 @@
                         hover:file:bg-rose-100"
                 >
 
-                <p class="text-lg text-gray-400 mt-1">
+                <p class="text-md text-gray-400 mt-1">
                     Upload beberapa foto.
                 </p>
                 @error('images')

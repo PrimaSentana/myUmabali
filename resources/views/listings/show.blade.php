@@ -227,8 +227,8 @@
             </div>
 
             <section class="py-8 border-t border-gray-200">
+                <div class="text-black text-lg font-semibold mb-4">Ulasan Pengguna</div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
-
                     @foreach($reviews as $review)
                         <div class="flex flex-col">
                             <div class="flex items-center gap-4 mb-3">
