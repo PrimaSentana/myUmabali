@@ -264,20 +264,8 @@
                             <div class="text-gray-700 leading-relaxed text-base line-clamp-3">
                                 {{ $review->comment }}
                             </div>
-
-                            @if(strlen($review->comment) > 150)
-                                <button class="mt-2 text-gray-900 underline font-medium text-sm text-left decoration-1 underline-offset-2 hover:text-gray-600 w-fit">
-                                    Tampilkan lebih banyak
-                                </button>
-                            @endif
                         </div>
                     @endforeach
-                </div>
-
-                <div class="mt-10">
-                    <button class="px-6 py-3 border border-gray-900 rounded-lg font-semibold text-gray-900 hover:bg-gray-50 transition text-base">
-                        Tampilkan semua {{ $reviews->count() }} ulasan
-                    </button>
                 </div>
             </section>
         </div>
