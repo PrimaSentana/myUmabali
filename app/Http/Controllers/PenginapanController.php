@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 class PenginapanController extends Controller
 {
     public function test() { //ngetest azahhh
-        dd(request()->hasFile('image_kamar'), request()->hasFile('image_cover'), request()->hasFile('images'));
+        dd();
     }
     
     public function index(Listings $listings) {
@@ -136,6 +136,14 @@ class PenginapanController extends Controller
 
         $listings = Listings::findOrFail($id);
 
+        $idsCover   = json_decode(request('removed_cover_ids'), true) ?? [];
+        $idsKamar   = json_decode(request('removed_kamar_ids'), true) ?? [];
+        $idsGeneral = json_decode(request('removed_general_ids'), true) ?? [];
+
+        $allIds = array_merge($idsCover, $idsKamar, $idsGeneral);
+
+        // dd($idsCover, $idsKamar, $idsGeneral, $allIds, request()->image_edit_cover, request()->image_edit_kamar, request()->image_edit_general);
+
         request()->validate([
             'title' => ['required', 'min:5'],
             'description' => ['required'],
@@ -145,7 +153,9 @@ class PenginapanController extends Controller
             'location_value' => ['required'],
             'category' => ['required'],
             'facilities' => ['array', 'required', 'min:1'],
-            'images' => ['array'],
+            'image_edit_cover' => 'required_with:removed_cover_ids|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_edit_kamar' => 'required_with:removed_kamar_ids|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_edit_general' => 'required_with:removed_general_ids|nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => ['required'],
         ]);
 
@@ -168,25 +178,36 @@ class PenginapanController extends Controller
             $listings->facilities()->sync(request()->facilities);
         }
 
-        if (request()->filled('removed_images')) {
-            $ids = json_decode(request()->removed_images, true);
-
-            $images = ListingImage::whereIn('id', $ids)->get();
-
-            foreach ($images as $image) {
+        if(!empty($allIds)) {
+            $images = ListingImage::whereIn('id', $allIds)->get();
+            
+            foreach($images as $image) {
                 Storage::disk('public')->delete($image->image_path);
                 $image->delete();
             }
         }
 
-        if (request()->hasFile('images')) {
-            foreach (request()->file('images') as $index => $file) {
-                $path = $file->store('listings', 'public');
+        if(request()->hasFile('image_edit_cover')) {
+            $path = request()->file('image_edit_cover')->store('listings', 'public');
+            $listings->images()->create([
+                'image_path' => $path,
+                'isCover' => true
+            ]);
+        }
 
+        if(request()->hasFile('image_edit_kamar')) {
+            $path = request()->file('image_edit_kamar')->store('listings', 'public');
+            $listings->images()->create([
+                'image_path' => $path,
+                'isKamar' => true
+            ]);
+        }
+        
+        if (request()->hasFile('image_edit_general')) {
+            foreach (request()->file('image_edit_general') as $index => $file) {
+                $path = $file->store('listings', 'public');
                 $listings->images()->create([
                     'image_path' => $path,
-                    'isCover' => false,
-                    'isKamar' => $index === 0 || $index === 1,
                 ]);
             }
         }

@@ -227,25 +227,24 @@
             </div>
 
 
-            {{-- images --}}
+            {{-- image cover --}}
             <div>
                 <label class="block text-lg font-medium text-gray-700 mb-2">
-                    Foto Penginapan
+                    Cover Penginapan
                 </label>
 
                 <input
-                    id="images-edit"
+                    id="image_edit_cover"
                     type="file"
-                    name="images[]"
-                    multiple
+                    name="image_edit_cover"
                     accept="image/*"
                     class="block w-full text-lg text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-lg file:font-medium file:bg-rose-50 file:text-rose-600 hover:file:bg-rose-100"
                 >
 
                 <p class="text-lg text-gray-400 mt-1">
-                    Upload beberapa foto. Foto pertama otomatis jadi cover.
+                    Upload image cover penginapan anda
                 </p>
-                @error('images')
+                @error('image_edit_cover')
                     <p class="text-red-500 text-sm">{{ $message }}</p>
                 @enderror
 
@@ -253,24 +252,100 @@
                 <p class="text-lg text-gray-400 mt-1">
                     gambar baru akan tampil di sini!
                 </p>
-                <div id="preview" class="grid grid-cols-3 gap-4 mt-4"></div>
+                <div id="preview-baru-cover" class="grid grid-cols-3 gap-4 mt-4"></div>
 
                 {{-- preview lama --}}
                 <p class="text-lg text-gray-400 mt-1">
-                    list gambar
+                    Cover Lama
                 </p>
-                <div id="image-preview-lama" class="grid grid-cols-3 gap-4 mt-4">
-                    @foreach ($listings->images as $image)
+                <div id="preview-lama-cover" class="grid grid-cols-3 gap-4 mt-4">
+                    <div class="relative image-item" data-existing="true" data-id="{{ $listings->images->where('isCover', true)->first()->id }}">
+                        <img src="{{ asset('storage/' . $listings->images->where('isCover', true)->first()->image_path) }}" class=" w-full h-32 object-cover rounded-lg">
+                        <button type="button" class="remove-existing-btn text-white font-bold absolute top-2 right-2 rounded-full w-7 h-7">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" name="removed_cover_ids" id="removed-cover">
+            </div>
+
+            {{-- kamar --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-2">
+                    Kamar Penginapan
+                </label>
+
+                <input
+                    id="image_edit_kamar"
+                    type="file"
+                    name="image_edit_kamar"
+                    accept="image/*"
+                    class="block w-full text-lg text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-lg file:font-medium file:bg-rose-50 file:text-rose-600 hover:file:bg-rose-100"
+                >
+                @error('image_edit_kamar')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+
+                {{-- preview baru --}}
+                <p class="text-lg text-gray-400 mt-1">
+                    gambar baru akan tampil di sini!
+                </p>
+                <div id="preview-baru-kamar" class="grid grid-cols-3 gap-4 mt-4"></div>
+
+                {{-- preview lama --}}
+                <p class="text-lg text-gray-400 mt-1">
+                    Kamar Lama
+                </p>
+                <div id="preview-lama-kamar" class="grid grid-cols-3 gap-4 mt-4">
+                    <div class="relative image-item" data-existing="true" data-id="{{ $listings->images->where('isKamar', true)->first()->id }}">
+                        <img src="{{ asset('storage/' . $listings->images->where('isKamar', true)->first()->image_path) }}" class=" w-full h-32 object-cover rounded-lg">
+                        <button type="button" class="remove-existing-btn text-white font-bold absolute top-2 right-2 rounded-full w-7 h-7">
+                            ✕
+                        </button>
+                    </div>
+                </div>
+                <input type="hidden" name="removed_kamar_ids" id="removed-kamar">
+            </div>
+
+            {{-- general img --}}
+            <div>
+                <label class="block text-lg font-medium text-gray-700 mb-2">
+                    Foto Penginapan lainnya
+                </label>
+
+                <input
+                    id="image_edit_general"
+                    type="file"
+                    name="image_edit_general[]"
+                    multiple
+                    accept="image/*"
+                    class="block w-full text-lg text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-lg file:font-medium file:bg-rose-50 file:text-rose-600 hover:file:bg-rose-100"
+                >
+                @error('image_edit_general')
+                    <p class="text-red-500 text-sm">{{ $message }}</p>
+                @enderror
+
+                {{-- preview baru --}}
+                <p class="text-lg text-gray-400 mt-1">
+                    gambar baru akan tampil di sini!
+                </p>
+                <div id="preview-baru-general" class="grid grid-cols-3 gap-4 mt-4"></div>
+
+                {{-- preview lama --}}
+                <p class="text-lg text-gray-400 mt-1">
+                    Gambar Lama Lainnya
+                </p>
+                <div id="preview-lama-general" class="grid grid-cols-3 gap-4 mt-4">
+                    @foreach ( $listings->images->where('isKamar', false)->where('isCover', false) as $image)
                         <div class="relative image-item" data-existing="true" data-id="{{ $image->id }}">
                             <img src="{{ asset('storage/' . $image->image_path) }}" class=" w-full h-32 object-cover rounded-lg">
-                            <button type="button" class="remove-image text-white font-bold absolute top-2 right-2 rounded-full w-7 h-7">
+                            <button type="button" class="remove-existing-btn text-white font-bold absolute top-2 right-2 rounded-full w-7 h-7">
                                 ✕
                             </button>
                         </div>
                     @endforeach
                 </div>
-
-                <input type="hidden" name="removed_images" id="removed-images">
+                <input type="hidden" name="removed_general_ids" id="removed-general">
             </div>
 
 
@@ -297,4 +372,27 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        new ImageUploader({
+            inputId: 'image_edit_cover',            // Input type file
+            previewNewId: 'preview-baru-cover', // Div kosong buat preview upload baru
+            previewOldId: 'preview-lama-cover', // Div berisi gambar lama dari DB
+            removedInputId: 'removed-cover'    // Input hidden buat nampung ID yg dihapus
+        });
+        new ImageUploader({
+            inputId: 'image_edit_kamar',            // Input type file
+            previewNewId: 'preview-baru-kamar', // Div kosong buat preview upload baru
+            previewOldId: 'preview-lama-kamar', // Div berisi gambar lama dari DB
+            removedInputId: 'removed-kamar'    // Input hidden buat nampung ID yg dihapus
+        });
+        new ImageUploader({
+            inputId: 'image_edit_general',            // Input type file
+            previewNewId: 'preview-baru-general', // Div kosong buat preview upload baru
+            previewOldId: 'preview-lama-general', // Div berisi gambar lama dari DB
+            removedInputId: 'removed-general'    // Input hidden buat nampung ID yg dihapus
+        });
+    });
+</script>
 @endsection

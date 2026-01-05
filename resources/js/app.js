@@ -4,15 +4,14 @@ import Alpine from 'alpinejs';
 import { previewMap } from './map/preview-map';
 import { leafletMap } from './map/leaflet';
 import { imageUpload } from './listings/image-upload';
-import { imageEdit } from './listings/image-edit';
 import { imageUploadCover } from './listings/image-cover';
 import { imageUploadKamar } from './listings/image-kamar';
 import { imageUploadProfile } from './listings/image-profile';
+import './listings/image-edit-handler';
 
 window.Alpine = Alpine;
 
 Alpine.start();
-
 
 document.addEventListener('DOMContentLoaded', () => {
     imageUploadCover();
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     previewMap();
     leafletMap();
     imageUpload();
-    imageEdit();
 });
 
 flatpickr('#date_range', {
