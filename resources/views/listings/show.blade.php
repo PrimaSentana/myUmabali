@@ -227,8 +227,8 @@
             </div>
 
             <section class="py-8 border-t border-gray-200">
+                <div class="text-black text-lg font-semibold mb-4">Ulasan Pengguna</div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
-
                     @foreach($reviews as $review)
                         <div class="flex flex-col">
                             <div class="flex items-center gap-4 mb-3">
@@ -264,20 +264,8 @@
                             <div class="text-gray-700 leading-relaxed text-base line-clamp-3">
                                 {{ $review->comment }}
                             </div>
-
-                            @if(strlen($review->comment) > 150)
-                                <button class="mt-2 text-gray-900 underline font-medium text-sm text-left decoration-1 underline-offset-2 hover:text-gray-600 w-fit">
-                                    Tampilkan lebih banyak
-                                </button>
-                            @endif
                         </div>
                     @endforeach
-                </div>
-
-                <div class="mt-10">
-                    <button class="px-6 py-3 border border-gray-900 rounded-lg font-semibold text-gray-900 hover:bg-gray-50 transition text-base">
-                        Tampilkan semua {{ $reviews->count() }} ulasan
-                    </button>
                 </div>
             </section>
         </div>
