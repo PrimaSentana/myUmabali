@@ -7,7 +7,9 @@ use App\Models\Listings;
 use App\Models\Reservation;
 use App\Services\MidtransService;
 use Carbon\Carbon;
+use Filament\Notifications\Notification as Notifications;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notification as NotificationsNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Midtrans\Config;
@@ -20,7 +22,6 @@ class ReservationController extends Controller
         if($dateLength <= 11) {
             dd("tanggal tidak valid");
         }
-
 
         $listings = Listings::findOrFail($id);
         [$checkIn, $checkOut] = explode(' to ', request('date_range'));
@@ -64,6 +65,11 @@ class ReservationController extends Controller
     public function store($id) {
         $dateLength = strlen(request()->date_range);
         if($dateLength <= 11) {
+            Notifications::make()
+            ->title('Tanggal tidak valid!')
+            ->body('Pastikan anda memasukkan tanggal check in dan check out!')
+            ->danger()
+            ->send();
             return back()->withErrors('Tanggal tidak valid');
         }
 
@@ -78,16 +84,28 @@ class ReservationController extends Controller
         $cekCheckOut = Carbon::parse($tanggal_check_out);
         
         if($cekCheckIn->gte($cekCheckOut)) {
+            Notifications::make()
+            ->title('Gagal reservasi')
+            ->body('Pastikan tanggal check-in dan check-out valid!')
+            ->danger()
+            ->send();
+
             return back()->withErrors('Tanggal tidak valid');
         }
 
         // cek bentrok
         $isReserved = Reservation::where('listings_id', $listings->id)
-        ->whereIn('payment_status', ['pending', 'paid'])->where(function ($query) use ($tanggal_check_in, $tanggal_check_out) {
-            $query->where('check_in', '<', $tanggal_check_out)->where('check_out', '>', $tanggal_check_in);
+        ->whereIn('payment_status', ['pending', 'paid'])->where(function ($query) use ($cekCheckIn, $cekCheckOut) {
+            $query->where('check_in', '<', $cekCheckOut)->where('check_out', '>', $cekCheckIn);
         })->exists();
 
         if($isReserved) {
+            Notifications::make()
+            ->title('Gagal reservasi')
+            ->body('Tanggal yang anda pilih tidak tersedia saat ini')
+            ->danger()
+            ->send();
+
             return back()->withErrors('Tanggal sudah dibooking');
         }
 
@@ -145,6 +163,12 @@ class ReservationController extends Controller
         $reservation->update([
             'snap_token' => $snapToken
         ]);
+
+        Notifications::make()
+        ->title('Reservasi berhasil dibuat')
+        ->body('Pastikan anda membayar tepat waktu')
+        ->success()
+        ->send();
 
         return redirect(route('reservation.checkout', ['id' => $reservation->id]));
     }
@@ -220,6 +244,11 @@ class ReservationController extends Controller
         $reservation->update([
             'payment_status' => 'cancelled'
         ]);
+
+        Notifications::make()
+        ->title('Reservasi berhasil dibatalkan')
+        ->success()
+        ->send();
         
         return back()->with('success', 'Reservasi berhasil dibatalkan');
     }
@@ -248,6 +277,12 @@ class ReservationController extends Controller
         Balance::findOrFail($reservation->listings->user_id)->update([
             'balance' => $balance + ($reservation->total_price - ($reservation->total_price * 10 / 100))
         ]);
+
+        Notifications::make()
+        ->title('Reservasi completed')
+        ->body('Silahkan cek saldo kamu di menu profile')
+        ->success()
+        ->send();
 
         return back()->with('success', "Reservasi selesai");
     }

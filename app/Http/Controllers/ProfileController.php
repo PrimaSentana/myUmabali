@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
+use Filament\Notifications\Notification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -72,6 +73,13 @@ class ProfileController extends Controller
                 'images' => $path
             ]);
         }
+
+        Notification::make()
+        ->title('Berhasil')
+        ->body('Profile berhasil diupdate!')
+        ->success()
+        ->send();
+
         return back()->with('success', 'Profile Updated');
     }
 }

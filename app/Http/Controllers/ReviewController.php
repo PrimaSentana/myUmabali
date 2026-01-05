@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Reservation;
 use App\Models\Reviews;
+use Filament\Notifications\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,6 +43,12 @@ class ReviewController extends Controller
             'rating' => $validated['rating'],
             'comment' => $validated['comment'] ?? null
         ]);
+
+        Notification::make()
+        ->title('Berhasil')
+        ->body('Terima kasih atas ulasan anda!')
+        ->success()
+        ->send();
 
         return redirect(route('reservation.my'))->with('success', 'Thanks for your review!');
     }

@@ -26,8 +26,8 @@ require __DIR__.'/auth.php';
 Route::get('/', [PenginapanController::class, 'index'])->name('xdashboard');
 
 // Listings
-Route::get('/form/penginapan', [PenginapanController::class, 'create'])->name('listings.create');
-Route::get('/penginapan/{listings}/edit', [PenginapanController::class, 'edit'])->name('listings.edit');
+Route::get('/form/penginapan', [PenginapanController::class, 'create'])->name('listings.create')->middleware('auth', 'verified');
+Route::get('/penginapan/{listings}/edit', [PenginapanController::class, 'edit'])->name('listings.edit')->middleware('auth', 'verified');
 Route::post('/penginapan', [PenginapanController::class, 'store'])->name('listings.store')->middleware('auth');
 Route::post('/penginapan/favorite/{id}', [PenginapanController::class, 'favorite'])->name('listings.favorite')->middleware('auth');
 Route::post('/penginapan/favorite/{id}/cancel', [PenginapanController::class, 'cancelFavorite'])->name('listings.xfavorite')->middleware('auth');
@@ -41,18 +41,18 @@ Route::get('/owner/penginapan', [MenuController::class, 'penginapan'])->name('me
 
 // Reservasi
 Route::get('/reservation', [ReservationController::class, 'index'])->name('reservation.my')->middleware('auth');
-Route::get('/checkout/{id}', [ReservationController::class, 'checkout'])->name('reservation.checkout')->middleware('auth');
-Route::post('/reservation/{id}', [ReservationController::class, 'store'])->name('reservation.store')->middleware('auth');
-Route::patch('/reservation/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel')->middleware('auth');
-Route::patch('/reservation/{id}/completed', [ReservationController::class, 'completed'])->name('reservation.completed')->middleware('auth');
+Route::get('/checkout/{id}', [ReservationController::class, 'checkout'])->name('reservation.checkout')->middleware('auth', 'verified');
+Route::post('/reservation/{id}', [ReservationController::class, 'store'])->name('reservation.store')->middleware('auth', 'verified');
+Route::patch('/reservation/{id}/cancel', [ReservationController::class, 'cancel'])->name('reservation.cancel')->middleware('auth', 'verified');
+Route::patch('/reservation/{id}/completed', [ReservationController::class, 'completed'])->name('reservation.completed')->middleware('auth', 'verified');
 
 //Booking
 Route::get('/owner/booking', [OwnerController::class, 'index'])->name('booking.my')->middleware('auth');
 Route::get('/owner/booking/{reservation}', [OwnerController::class, 'show'])->name('booking.show')->middleware('auth');
 
 // review
-Route::get('/reservation/{id}/review', [ReviewController::class, 'create'])->name('review.create')->middleware('auth');
-Route::post('/reservation/{id}/review', [ReviewController::class, 'store'])->name('review.store')->middleware('auth');
+Route::get('/reservation/{id}/review', [ReviewController::class, 'create'])->name('review.create')->middleware('auth', 'verified');
+Route::post('/reservation/{id}/review', [ReviewController::class, 'store'])->name('review.store')->middleware('auth', 'verified');
 
 Route::get('/search', [PenginapanController::class, 'search'])->name('listings.search');
 

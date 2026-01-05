@@ -29,7 +29,6 @@ class PenginapanController extends Controller
     
     public function create() {
         $categories = Category::all();
-
         $facilities = Facility::all();
 
         return view('listings.create', ['categories' => $categories, 'facilities' => $facilities]);
@@ -100,6 +99,12 @@ class PenginapanController extends Controller
             }
         }
 
+        Notification::make()
+        ->title('Upload Penginapan Berhasil')
+        ->body('Penginapan anda sudah terdaftar!')
+        ->success()
+        ->send();
+
         return redirect()->route('xdashboard')
         ->with('success', 'Penginapan berhasil ditambahkan');
     }
@@ -112,7 +117,6 @@ class PenginapanController extends Controller
         ->take(2)
         ->get();
         $facilities = $listings->facilities()->get();
-
         $reviews = $listings->reviews;
 
         return view('listings.show', ['listings' => $listings, 'images' => $images, 'facilities' => $facilities, 'user' => $user, 'reviews' => $reviews]);
@@ -187,6 +191,12 @@ class PenginapanController extends Controller
             }
         }
 
+        Notification::make()
+        ->title('Berhasil')
+        ->body('Penginapan anda berhasil diupdate!')
+        ->success()
+        ->send();
+
         return redirect(route('listings.show', $listings->id));
     }
     
@@ -200,6 +210,12 @@ class PenginapanController extends Controller
 
         $listings->facilities()->detach();
         $listings->delete();
+
+        Notification::make()
+        ->title('Berhasil')
+        ->body('Penginapan anda berhasil dihapus!')
+        ->success()
+        ->send();
 
         return redirect(route('xdashboard'));
     }
@@ -227,7 +243,7 @@ class PenginapanController extends Controller
         }
 
         Notification::make()
-        ->title('Berhasil cancel')
+        ->title('Berhasil cancel favorite')
         ->color('#FD151B')
         ->send();
 
